@@ -33,10 +33,10 @@
 - S9 completed in `src/components/home/home-more.tsx` and `src/app/home-more.css`: leagues / competitions / categories now render as grouped tile stages with desktop slide-up group transitions, tab-style group controls, and readable stacked mobile/reduced-motion fallbacks.
 
 ## In progress
-- None. Step 3 (Home S6–S13) is complete.
+- None. StoryDeck hydration fix is complete.
 
 ## Next
-- Stop after Step 3. Await an explicit next-step instruction before changing inner pages or other areas.
+- Stop after this fix. Await an explicit next-step instruction before changing other areas.
 
 ## Decisions
 - This is a local repository implementation; no hosting or publication.
@@ -50,3 +50,4 @@
 - Search results expose expandable article markdown as a foundation preview; dedicated article/team/player pages remain deferred.
 - Public environment variables are embedded at build time; rebuild after changing API mode, base URL or site URL.
 - Browser visual verification is unavailable: browser host/native pipe are not connected. Use production build and HTTP checks; no visual QA is claimed.
+- StoryDeck autoplay/live-region state in `src/components/home/home-interactive.tsx` must stay SSR-stable on the first render; motion-dependent running state now activates only after mount to avoid hydration mismatches.

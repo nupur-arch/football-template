@@ -39,18 +39,22 @@ export function StoryDeck({ articles }: { articles: Article[] }) {
   const [paused, setPaused] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [drag, setDrag] = useState(0);
   const pointer = useRef<{ x: number; id: number } | null>(null);
   const dragged = useRef(false);
   const rail = useRef<HTMLDivElement>(null);
   const elapsed = useRef(0);
   const count = articles.length;
-  const running = reduced === false && !paused && !hovered && !focused && count > 1;
+  const running = mounted && reduced === false && !paused && !hovered && !focused && count > 1;
   const select = (next: number) => {
     setIndex((next + count) % count);
     elapsed.current = 0;
     setProgress(0);
   };
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   useEffect(() => {
     const container = rail.current;
     const active = container?.children[index] as HTMLElement | undefined;
