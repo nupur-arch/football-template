@@ -17,3 +17,33 @@ export const homeCopy = {
   questions: ['Who scored?', 'When is kickoff?', 'Where is the table?', 'Whoâ€™s on the move?', 'What a finish!', 'Who starts tonight?'],
   ask: 'Find your answer', fixtureNote: 'Illustrative fixture data',
 } as const;
+export const moreCopy = {
+  fixtureNote: 'Illustrative football data',
+  centerLabel: 'The match center', centerTitle: 'Every moment. In the picture.', centerBody: 'The score, the table, the players behind it. Follow the whole story in one connected view.',
+  live: 'Match snapshot', table: 'The table', playerStats: 'Player spotlight', points: 'Pts', played: 'P',
+  allLabel: 'Less searching. More football.', allTitle: 'Everything in one place.', leagues: 'Your leagues', leagueNote: 'Choose a competition to explore its table.',
+  connectionLeft: 'Follow your club.', connectionRight: 'See the whole game.', connection: 'One shared obsession',
+  ctaTitle: 'Your next football rabbit hole starts here.', cta: 'Find your football',
+  stats: ['Featured stories', 'Clubs to follow', 'Players in focus'],
+  featuresLabel: 'Five ways into the game', featuresTitle: 'Stay a step closer.',
+  features: [
+    { title: 'Live scores', body: 'Keep the match in view, from the first whistle to the final score.' },
+    { title: 'Table', body: 'Every point changes the picture. See where your club stands.' },
+    { title: 'Players', body: 'Meet the names making the difference, one goal and assist at a time.' },
+    { title: 'Transfers', body: 'Follow the conversations about the next chapter. Search the latest transfer coverage.' },
+    { title: 'News', body: 'Go beyond the result with the stories and ideas shaping football.' },
+  ],
+  tilesLabel: 'Pick your corner', tilesTitle: 'A whole world of football.', tileTypes: ['Leagues', 'Competitions', 'Categories'],
+  voicesLabel: 'From the stands', voicesTitle: 'Football is better together.', voicesNote: 'Illustrative fan voices for this template.', previous: 'Previous fan voice', next: 'Next fan voice',
+  voices: [
+    { name: 'Amara', initials: 'AM', club: 'The weekend regular', quote: 'The score gets me here. The stories keep me here. There is always another angle to the game.' },
+    { name: 'Leo', initials: 'LE', club: 'The tactics enthusiast', quote: 'I love seeing how a small change on the pitch can tell a much bigger story.' },
+    { name: 'Noor', initials: 'NO', club: 'The lifelong supporter', quote: 'A match lasts ninety minutes. Talking about it with other fans lasts all week.' },
+  ],
+  pathLabel: 'From anticipation to understanding', pathTitle: 'Make a day of it.',
+  path: [ { title: 'Preview', body: 'The context, the questions, the players to watch.', query: 'fixtures' }, { title: 'Live', body: 'Follow the score as the story unfolds.', query: 'live' }, { title: 'Report', body: 'Catch the moments that decided the game.', query: 'report' }, { title: 'Analysis', body: 'Understand the ideas behind the result.', query: 'analysis' } ],
+  newsletterLabel: 'A little more Touchline', newsletterTitle: 'A good read. A great game.', newsletterBody: 'Make room for a fresh football perspective in your inbox.', email: 'Email address', submit: 'Keep me in the loop', newsletterNote: 'Demo form: your email stays in this browser. No subscription is sent.', newsletterSuccess: 'Saved on this device. This demo does not send email.', newsletterError: 'Your browser could not save this. Please try again.',
+  faqTitle: 'A few things to know.', faqs: [ { question: 'Are these live scores?', answer: 'The template currently uses illustrative fixture data. The service layer can be connected to a live football API.' }, { question: 'Can I explore teams and players?', answer: 'Yes. Search by a team or player name to explore the available profiles and stories.' }, { question: 'What happens when I sign up?', answer: 'This local demo saves your email on your device only. Connect an email provider before using it for real subscriptions.' } ],
+  toggleTitle: 'The difference makers.', goals: 'Goals', assists: 'Assists', ranking: 'Player ranking',
+  closingWords: ['ALL GAME.', 'ALL HEART.', 'ALL HERE.'], closingTitle: 'See you at the touchline.', closingBody: 'One more story. One more conversation. A whole lot of football.',
+} as const;
