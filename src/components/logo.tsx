@@ -1,0 +1,3 @@
+import Link from 'next/link';
+import { siteConfig } from '@/content/site.config';
+export function Logo({light=false}:{light?:boolean}){return <Link href="/" aria-label={siteConfig.name+' home'} className={'group inline-flex items-center gap-2.5 '+(light?'text-white':'text-ink')}><svg aria-hidden="true" viewBox="0 0 40 40" className="logo-mark h-9 w-9 transition-transform duration-entrance ease-editorial group-hover:-rotate-6"><rect width="40" height="40" rx="12" fill={siteConfig.colors.pitch}/><path d="M10 10h24l-4 7h-7v15h-8V17H7z" fill={siteConfig.colors.lime}/></svg><span className="font-display text-xl font-bold tracking-[-.06em]">{siteConfig.name}<span className="ml-0.5 text-xs">®</span></span></Link>}

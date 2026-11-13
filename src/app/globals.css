@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root { --footer:#111e17; --accent:#799c34; --canvas:var(--palette-light-canvas,#fafaf6); --ink:var(--palette-light-ink,#14251c); --muted:var(--palette-light-muted,#58665e); --surface:var(--palette-light-surface,#fff); --line:var(--palette-light-line,#dde3d9); --pitch:#123c2c; --lime:#d5f86c; --blue:#d7e8ee; --coral:#f6cbbd; --mint:#e2edda; --radius-card:1.75rem; --shadow-soft:0 12px 40px #123c2c0d; --ease:cubic-bezier(.22,1,.36,1); --duration-entrance:650ms; --duration-stagger:75ms; --duration-toggle:250ms; --duration-accordion:300ms; }
+.dark { --canvas:var(--palette-dark-canvas,#0b1712); --ink:var(--palette-dark-ink,#f4f6ec); --muted:var(--palette-dark-muted,#a8b8aa); --surface:var(--palette-dark-surface,#14251c); --line:var(--palette-dark-line,#304338); --shadow-soft:0 12px 40px #0003; }
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; scroll-padding-top:7rem; }
+body { margin:0; background:var(--canvas); color:var(--ink); font-size:16px; }
+::selection { background:var(--lime); color:var(--pitch); }
+a,button,input,summary { -webkit-tap-highlight-color:transparent; }
+a,button { transition:opacity var(--duration-toggle),transform var(--duration-toggle) var(--ease); }
+button:not(:disabled),summary { cursor:pointer; }
+button:disabled { opacity:.45; cursor:not-allowed; }
+a:active,button:active:not(:disabled) { transform:translateY(1px); }
+:focus-visible { outline:3px solid #7c9c32; outline-offset:5px; }
+.container-shell { width:min(1240px,calc(100% - 3rem)); margin-inline:auto; }
+.grid-paper { background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px); background-size:48px 48px; }
+@media(max-width:480px) { .container-shell { width:calc(100% - 2rem); } }
+@media(prefers-reduced-motion:reduce) { html{scroll-behavior:auto} *,*::before,*::after { animation:none!important; transition-duration:0.01ms!important; } }
+.prose-content { line-height:1.8; overflow-wrap:anywhere; }
+.prose-content h2 { font-family:var(--font-display);font-size:1.8rem;margin:1.5rem 0 .75rem; }
+.prose-content a { text-decoration:underline;text-underline-offset:4px; }
+.prose-content ul { list-style:disc;padding-left:1.5rem; }
+.prose-content ol { list-style:decimal;padding-left:1.5rem; }
+.prose-content p { margin-block:1rem; }
+
+@keyframes logo-arrive { from { opacity:0; transform:translateY(3px); } to { opacity:1; transform:translateY(0); } }
+.logo-mark { animation:logo-arrive var(--duration-entrance) var(--ease) both; }

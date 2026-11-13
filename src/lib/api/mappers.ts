@@ -1,0 +1,13 @@
+import type { Article, Banner, Category, Match, Player, Standing, Team } from '@/types';
+type Row = Record<string, unknown>;
+const row = (v: unknown): Row => { if (!v || typeof v !== 'object' || Array.isArray(v)) throw new Error('Invalid API object'); return v as Row; };
+const str = (v: unknown, fallback = '') => typeof v === 'string' ? v : fallback;
+const num = (v: unknown) => typeof v === 'number' && Number.isFinite(v) ? v : 0;
+const img = (v: unknown) => { const s = str(v); return s.startsWith('/') && !s.startsWith('//') ? s : '/images/fallback.svg'; };
+export const mapApiCategory = (v: unknown): Category => { const x=row(v); return {id:str(x.id),name:str(x.name),slug:str(x.slug)}; };
+export const mapApiTeam = (v: unknown): Team => { const x=row(v); return {id:str(x.id),name:str(x.name),shortName:str(x.shortName),crest:img(x.crest),league:str(x.league)}; };
+export const mapApiArticle = (v: unknown): Article => { const x=row(v); return {id:str(x.id),slug:str(x.slug),title:str(x.title),excerpt:str(x.excerpt),content:str(x.content),image:img(x.image),category:mapApiCategory(x.category),publishedAt:str(x.publishedAt),author:str(x.author),featured:x.featured===true,readingMinutes:num(x.readingMinutes)}; };
+export const mapApiPlayer = (v: unknown): Player => { const x=row(v); return {id:str(x.id),name:str(x.name),teamId:str(x.teamId),position:str(x.position),goals:num(x.goals),assists:num(x.assists),image:img(x.image)}; };
+export const mapApiMatch = (v: unknown): Match => { const x=row(v); return {id:str(x.id),homeTeam:mapApiTeam(x.homeTeam),awayTeam:mapApiTeam(x.awayTeam),homeScore:x.homeScore===null?null:num(x.homeScore),awayScore:x.awayScore===null?null:num(x.awayScore),kickoff:str(x.kickoff),status:x.status==='live'||x.status==='finished'?x.status:'scheduled',competition:str(x.competition)}; };
+export const mapApiStanding = (v: unknown): Standing => { const x=row(v); return {id:str(x.id),team:mapApiTeam(x.team),rank:num(x.rank),played:num(x.played),won:num(x.won),drawn:num(x.drawn),lost:num(x.lost),goalsFor:num(x.goalsFor),goalsAgainst:num(x.goalsAgainst),points:num(x.points)}; };
+export const mapApiBanner = (v: unknown): Banner => { const x=row(v); return {id:str(x.id),title:str(x.title),description:str(x.description),image:img(x.image),href:str(x.href).startsWith('/')&&!str(x.href).startsWith('//')?str(x.href):'/'}; };
