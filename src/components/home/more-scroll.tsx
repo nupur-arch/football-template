@@ -56,8 +56,8 @@ export default function MoreScroll({ root, onFeature }: { root: RefObject<HTMLDi
   useMotionValueEvent(scrollY, 'change', update);
   useEffect(() => {
     const media = window.matchMedia('(min-width: 768px) and (prefers-reduced-motion: no-preference)');
+    const node = root.current;
     const sync = () => {
-      const node = root.current;
       if (!node) return;
       node.classList.toggle('scroll-enhanced', media.matches);
       if (!media.matches) {
@@ -68,7 +68,7 @@ export default function MoreScroll({ root, onFeature }: { root: RefObject<HTMLDi
     sync();
     media.addEventListener('change', sync);
     window.addEventListener('resize', sync);
-    return () => { media.removeEventListener('change', sync); window.removeEventListener('resize', sync); root.current?.classList.remove('scroll-enhanced'); };
+    return () => { media.removeEventListener('change', sync); window.removeEventListener('resize', sync); node?.classList.remove('scroll-enhanced'); };
   }, [root]);
   return null;
 }

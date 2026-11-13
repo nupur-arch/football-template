@@ -28,11 +28,15 @@
 - Production HTTP checks passed: 20 server-rendered slides, 20 thumbnails, one selection, one H1, 20 NewsArticle schemas, readable S1–S5 text, four latest cards, six fan pills, both local assets and a working story search destination.
 - Final verification: `yarn lint` and `yarn build` passed. Browser host and native pipe remain unavailable; actual visual layout, native touch and browser motion playback are not claimed as verified.
 
+## Step 3 — Home S6–S13
+- Audit of WIP commit `6104b8f`: S6, S7, S8, S10, S11, S12 and S13 were already complete; only S9 was partial.
+- S9 completed in `src/components/home/home-more.tsx` and `src/app/home-more.css`: leagues / competitions / categories now render as grouped tile stages with desktop slide-up group transitions, tab-style group controls, and readable stacked mobile/reduced-motion fallbacks.
+
 ## In progress
-- None. Step 2 (Home S1–S5) is complete.
+- None. Step 3 (Home S6–S13) is complete.
 
 ## Next
-- Stop after Step 2. Await an explicit next-step instruction before building S6–S13 or inner pages.
+- Stop after Step 3. Await an explicit next-step instruction before changing inner pages or other areas.
 
 ## Decisions
 - This is a local repository implementation; no hosting or publication.
