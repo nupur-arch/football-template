@@ -1,4 +1,4 @@
-﻿# Build status
+# Build status
 
 ## Done
 - Step 1 foundation only: Next.js 15 App Router, TypeScript, Tailwind 3 and Yarn (`package.json`, `yarn.lock`).
@@ -17,11 +17,22 @@
 
 - Verification passed: `yarn lint`, `yarn build` (Next.js 15.5.29), and 10 production HTTP smoke checks: home, grouped/empty search, team/player listings, icon, fallback, robots, sitemap and 404.
 
+## Step 2 — Home S1–S5
+- S1: automatic four-phrase headline with synchronized geometric mosaic and pause control.
+- S2: exactly 20 featured service articles, 3D deck, animated counter, progress and complete thumbnail rail; one selection state drives all three, with autoplay, hover/focus pause, explicit pause, arrow keys and drag/swipe. Live-match strip and next-kickoff countdown use normalized Match data.
+- S3: grid-backed introduction and circular colored-shape illustration around the shared logo, using the shared reveal helper.
+- S4: four latest article cards stack with sticky positioning, scroll-linked scaling and dimming; ordinary cards on mobile/reduced motion.
+- S5: dark pinned fan section with a local blurred stadium illustration, opposing headlines, scroll-staggered question pills and an entry fade; unpinned on mobile/reduced motion.
+- Reused services, normalized types, SafeImage, Button/ButtonLink, Card, Logo and reduced-motion/reveal helpers. Home copy lives in content/strings.ts; scroll enhancement is loaded separately. Foundation behavior and services remain unchanged.
+- Targeted verification: `node scripts/verify-home.mjs` passes 50 component-logic/CSS/scroll checks, including every rail selection, wraparound, autoplay, hover/focus/pause, arrows, swipe, 320/375/767/768/1440px responsive rules, reduced-motion guards and preference-change cleanup.
+- Production HTTP checks passed: 20 server-rendered slides, 20 thumbnails, one selection, one H1, 20 NewsArticle schemas, readable S1–S5 text, four latest cards, six fan pills, both local assets and a working story search destination.
+- Final verification: `yarn lint` and `yarn build` passed. Browser host and native pipe remain unavailable; actual visual layout, native touch and browser motion playback are not claimed as verified.
+
 ## In progress
-- None. Step 1 foundation is complete.
+- None. Step 2 (Home S1–S5) is complete.
 
 ## Next
-- Stop after Step 1. Await an explicit next-step instruction before building the full S1-S13 homepage or inner pages.
+- Stop after Step 2. Await an explicit next-step instruction before building S6–S13 or inner pages.
 
 ## Decisions
 - This is a local repository implementation; no hosting or publication.

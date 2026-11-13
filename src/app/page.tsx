@@ -1,17 +1,26 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { ArrowUpRight, ArrowRight } from 'lucide-react';
+﻿import type { Metadata } from 'next';
 import { getArticles, getMatches } from '@/services';
 import { siteConfig } from '@/content/site.config';
 import { strings } from '@/content/strings';
-import { SafeImage } from '@/components/safe-image';
-import { ButtonLink, Card } from '@/components/ui';
-export async function generateMetadata():Promise<Metadata>{return {title:siteConfig.name+' — '+strings.tagline,alternates:{canonical:'/'}};}
-export default async function Home(){
- const [articles,matches]=await Promise.all([getArticles(),getMatches()]);
- const featured=articles.slice(0,3);
- const schema={'@context':'https://schema.org','@graph':[{'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:strings.home,item:siteConfig.url}]},...featured.map(article=>({'@type':'NewsArticle',headline:article.title,datePublished:article.publishedAt,author:{'@type':'Organization',name:article.author},publisher:{'@type':'Organization',name:siteConfig.name},image:new URL(article.image,siteConfig.url).href}))]};
- return <main id="main"><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,'\u003c')}}/><section className="container-shell py-16 text-center md:py-24"><p className="mb-5 text-[11px] font-semibold uppercase tracking-[.22em] text-muted"><span className="mr-2 inline-block h-2 w-2 rounded-full bg-accent"/>{strings.heroLabel}</p><h1 className="mx-auto max-w-2xl font-display text-5xl font-bold leading-[1.02] tracking-[-.07em] sm:text-7xl md:text-[6.5rem]">{strings.heroTitle}</h1><p className="mx-auto mb-8 mt-6 max-w-md text-base leading-7 text-muted">{strings.heroBody}</p><ButtonLink href="/search">{strings.explore}</ButtonLink></section>
- <section id="stories" className="container-shell"><div className="mb-6 flex items-end justify-between gap-3"><div><p className="mb-2 text-[10px] uppercase tracking-[.22em] text-muted">{strings.foundation}</p><h2 className="font-display text-3xl font-semibold tracking-[-.05em]">{strings.latest}</h2></div><span className="hidden text-xs text-muted sm:block">{strings.foundationNote}</span></div>{featured.length===0?<Card className="p-10 text-muted">{strings.empty}</Card>:<div className="grid gap-5 md:grid-cols-[1.65fr_1fr]">{featured.slice(0,1).map(article=><Link key={article.id} href={'/search?q='+encodeURIComponent(article.title)} className="group relative isolate flex min-h-[390px] flex-col justify-end overflow-hidden rounded-card bg-pitch p-7 text-white sm:min-h-[460px] sm:p-9"><SafeImage src={article.image} alt="" fill priority sizes="(max-width: 768px) 100vw, 65vw" className="-z-20 object-cover transition-transform duration-entrance ease-editorial group-hover:scale-105"/><div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/85 via-black/20 to-transparent"/><span className="mb-auto w-fit rounded-full border border-white/35 px-3 py-1 text-[10px] uppercase tracking-widest">{article.category.name}</span><div className="flex items-end gap-4"><div><h3 className="line-clamp-3 max-w-lg font-display text-3xl font-semibold leading-tight tracking-[-.04em] sm:text-4xl">{article.title}</h3><p className="mt-4 text-xs text-white/65">{article.author} · {article.readingMinutes} {strings.minutes}</p></div><span className="ml-auto rounded-2xl bg-lime p-4 text-pitch transition-transform duration-toggle group-hover:-translate-y-1"><ArrowUpRight/></span></div></Link>)}<div className="grid gap-5">{featured.slice(1).map((article,i)=><Link key={article.id} href={'/search?q='+encodeURIComponent(article.title)} className={'group flex flex-col justify-between rounded-card p-7 text-pitch '+(i?'bg-coral':'bg-blue')}><div className="mb-8 flex items-center justify-between text-[10px] font-medium uppercase tracking-widest"><span>{article.category.name}</span><span>0{i+2}</span></div><div className="flex items-end gap-5"><h3 className="line-clamp-3 font-display text-2xl font-semibold leading-tight tracking-[-.04em]">{article.title}</h3><ArrowUpRight className="shrink-0 transition-transform group-hover:-translate-y-1"/></div></Link>)}</div></div>}
- </section><section className="container-shell mt-8"><div className="grid-paper flex flex-wrap items-center justify-between gap-6 rounded-card border border-line p-6 sm:p-8"><div><p className="text-[10px] uppercase tracking-[.2em] text-muted">{strings.score}</p><p className="mt-2 font-display text-xl font-semibold">{matches[0]?matches[0].homeTeam.shortName+' '+(matches[0].homeScore??'–')+' : '+(matches[0].awayScore??'–')+' '+matches[0].awayTeam.shortName:strings.empty}</p></div><Link className="inline-flex items-center gap-3 text-sm font-medium hover:text-muted" href="/search?type=teams">{strings.teams}<ArrowRight size={18}/></Link></div></section></main>;
+import { HomeHero, StoryDeck, MatchStrip } from '@/components/home/home-interactive';
+import { HomeScenes } from '@/components/home/home-scenes';
+import './home.css';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: siteConfig.name + ' — ' + strings.tagline, alternates: { canonical: '/' } };
+}
+export default async function Home() {
+  const [articles, matches] = await Promise.all([getArticles(), getMatches()]);
+  const featured = articles.filter(article => article.featured).slice(0, 20);
+  const schema = { '@context': 'https://schema.org', '@graph': [
+    { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: strings.home, item: siteConfig.url }] },
+    ...featured.map(article => ({ '@type': 'NewsArticle', headline: article.title, datePublished: article.publishedAt,
+      author: { '@type': 'Organization', name: article.author }, publisher: { '@type': 'Organization', name: siteConfig.name },
+      image: new URL(article.image, siteConfig.url).href })),
+  ] };
+  return <main id="main">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, '\\u003c') }} />
+    <HomeHero /><StoryDeck articles={featured} /><MatchStrip matches={matches} />
+    <HomeScenes articles={articles.slice(0, 4)} />
+  </main>;
 }
