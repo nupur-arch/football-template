@@ -35,6 +35,11 @@
 ## In progress
 - None.
 
+## Logo
+- `Touchline` mark (`src/components/logo.tsx`) is a goal-line T: a broken crossbar, a center post, and a lime overlap that closes the notch. `currentColor` carries the mark; `--logo-accent` defaults to lime.
+- `<Logo variant="full | mark | stacked" />` is the header (word hidden under `md`), the footer, and `/brand` on light, dark, lime, and single-color grounds. Strokes draw in once; hover turns the mark. Reduced motion shows the finished mark still.
+- Icons: `src/app/icon.svg`, `public/favicon.svg`, and `src/app/apple-icon.tsx`.
+
 ## Next
 - Stop after this step. Await an explicit next-step instruction before changing other areas.
 

@@ -1,3 +1,19 @@
 import Link from 'next/link';
 import { siteConfig } from '@/content/site.config';
-export function Logo({light=false}:{light?:boolean}){return <Link href="/" aria-label={siteConfig.name+' home'} className={'group inline-flex items-center gap-2.5 '+(light?'text-white':'text-ink')}><svg aria-hidden="true" viewBox="0 0 40 40" className="logo-mark h-9 w-9 transition-transform duration-entrance ease-editorial group-hover:-rotate-6"><rect width="40" height="40" rx="12" fill={siteConfig.colors.pitch}/><path d="M10 10h24l-4 7h-7v15h-8V17H7z" fill={siteConfig.colors.lime}/></svg><span className="font-display text-xl font-bold tracking-[-.06em]">{siteConfig.name}<span className="ml-0.5 text-xs">®</span></span></Link>}
+
+function Mark() {
+  return <svg aria-hidden="true" viewBox="0 0 40 40" className="logo-glyph h-9 w-9 overflow-visible" fill="none" strokeWidth="7" strokeLinecap="square">
+    <path className="logo-stroke" pathLength="1" d="M6 12H16" />
+    <path className="logo-stroke logo-stroke-2" pathLength="1" d="M26 12H34" />
+    <path className="logo-stroke logo-stroke-3" pathLength="1" d="M20 12V36" />
+    <path className="logo-notch" pathLength="1" d="M14 12H28" />
+  </svg>;
+}
+
+export function Logo({ variant = 'full', light = false, className = '' }: { variant?: 'full' | 'mark' | 'stacked'; light?: boolean; className?: string }) {
+  const stacked = variant === 'stacked';
+  return <Link href="/" aria-label={siteConfig.name + ' home'} className={'logo-link inline-flex ' + (stacked ? 'flex-col items-center gap-1.5 text-center ' : 'items-center gap-2.5 ') + (light ? 'text-white ' : '') + className}>
+    <Mark />
+    {variant !== 'mark' && <span className="logo-word font-display text-[1.05rem] font-bold uppercase leading-none tracking-[-0.12em]">Touchline</span>}
+  </Link>;
+}

@@ -30,5 +30,17 @@ a:active,button:active:not(:disabled) { transform:translateY(1px); }
 .prose-content ol { list-style:decimal;padding-left:1.5rem; }
 .prose-content p { margin-block:1rem; }
 
-@keyframes logo-arrive { from { opacity:0; transform:translateY(3px); } to { opacity:1; transform:translateY(0); } }
-.logo-mark { animation:logo-arrive var(--duration-entrance) var(--ease) both; }
+.logo-glyph { transition: transform .35s var(--ease); }
+.logo-stroke { stroke: currentColor; }
+.logo-notch { stroke: var(--logo-accent, var(--lime)); transition: transform .3s var(--ease); }
+@media (prefers-reduced-motion: no-preference) {
+  .logo-stroke, .logo-notch { stroke-dasharray: 1; stroke-dashoffset: 1; animation: logo-draw .45s var(--ease) forwards; }
+  .logo-stroke-2 { animation-delay: .08s; }
+  .logo-stroke-3 { animation-delay: .16s; }
+  .logo-notch { animation-delay: .28s; }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .logo-link:hover .logo-glyph, .logo-link:focus-visible .logo-glyph { transform: rotate(-6deg); }
+  .logo-link:hover .logo-notch, .logo-link:focus-visible .logo-notch { transform: translateX(3px); }
+}
+@keyframes logo-draw { to { stroke-dashoffset: 0; } }
