@@ -10,6 +10,7 @@ import { Button, ButtonLink, Card } from '@/components/ui';
 import { Reveal } from '@/components/motion';
 import { SafeImage } from '@/components/safe-image';
 import { MatchdayPath } from '@/components/home/matchday-path';
+import { ClosingScene } from '@/components/home/closing-scene';
 import type { Article, Match, Player, Standing } from '@/types';
 
 const MoreScroll = dynamic(() => import('./more-scroll'), { ssr: false });
@@ -60,7 +61,7 @@ export function HomeMore({ articles, matches, standings, players }: Data) {
     <section className="container-shell more-section" aria-labelledby="voices-title"><Heading label={c.voicesLabel} title={c.voicesTitle} id="voices-title" /><div className="voice-carousel" role="region" aria-roledescription="carousel" aria-label={c.voicesTitle}><div aria-live="polite" aria-atomic="true"><article className="voice-card" key={voice}><div className="voice-avatar" aria-hidden="true">{c.voices[voice].initials}</div><blockquote>“{c.voices[voice].quote}”</blockquote><p className="font-semibold">{c.voices[voice].name}</p><p>{c.voices[voice].club}</p></article></div><div className="voice-controls"><Button aria-label={c.previous} onClick={() => setVoice((voice + c.voices.length - 1) % c.voices.length)}><ArrowLeft size={20} /></Button><span>{String(voice + 1).padStart(2, '0')} / 0{c.voices.length}</span><Button aria-label={c.next} onClick={() => setVoice((voice + 1) % c.voices.length)}><ArrowRight size={20} /></Button></div></div><p className="mt-4 text-xs text-muted">{c.voicesNote}</p></section>
     <MatchdayPath />
     <section className="container-shell more-section" aria-labelledby="newsletter-title"><h2 id="newsletter-title" className="sr-only">{c.newsletterTitle}</h2><div className="newsletter-grid"><Newsletter /><div className="newsletter-stats pastel-1"><p className="home-eyebrow">{c.toggleTitle}</p><div role="group" aria-label={c.ranking} className="stat-toggle">{(['goals', 'assists'] as const).map(value => <button key={value} aria-pressed={metric === value} onClick={() => setMetric(value)}>{c[value]}</button>)}</div><div key={metric} className="toggle-result" aria-live="polite"><Leaders players={players} metric={metric} /></div><p className="mt-8 text-sm">{counts[2]} {c.stats[2]}</p></div></div><div className="faq-grid"><h3 className="home-section-title">{c.faqTitle}</h3><div>{c.faqs.map(faq => <details className="home-faq" key={faq.question}><summary>{faq.question}<span aria-hidden="true" className="faq-symbol">+</span></summary><p>{faq.answer}</p></details>)}</div></div></section>
-    <section className="closing-section more-section" aria-label={c.closingTitle}><div className="closing-words container-shell" aria-hidden="true">{c.closingWords.map(word => <div className="closing-word" key={word}>{word}</div>)}</div><div className="container-shell"><Newsletter final /></div></section>
+    <ClosingScene><Newsletter final /></ClosingScene>
     <MoreScroll root={root} onFeature={setFeature} />
   </div>;
 }

@@ -38,8 +38,6 @@ export default function MoreScroll({ root, onFeature }: { root: RefObject<HTMLDi
         tile.style.opacity = String(.25 + stagger * .75);
       });
     });
-    const closing = progress('.closing-section');
-    node.querySelectorAll<HTMLElement>('.closing-word').forEach((word, i) => { word.style.transform = `translateX(${(1 - closing) * (i % 2 ? -1 : 1) * 90}px)`; });
   };
   useMotionValueEvent(scrollY, 'change', update);
   useEffect(() => {
@@ -49,7 +47,7 @@ export default function MoreScroll({ root, onFeature }: { root: RefObject<HTMLDi
       if (!node) return;
       node.classList.toggle('scroll-enhanced', media.matches);
       if (!media.matches) {
-        node.querySelectorAll<HTMLElement>('.paper-panel,.paper-content,.football-tile,.closing-word,.center-transition').forEach(element => { element.style.removeProperty('transform'); element.style.removeProperty('opacity'); });
+        node.querySelectorAll<HTMLElement>('.paper-panel,.paper-content,.football-tile,.center-transition').forEach(element => { element.style.removeProperty('transform'); element.style.removeProperty('opacity'); });
         node.querySelectorAll<HTMLElement>('[data-count]').forEach(counter => { counter.textContent = counter.dataset.count ?? '0'; });
       }
     };

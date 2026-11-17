@@ -38,6 +38,11 @@
 ## Next
 - Stop after this step. Await an explicit next-step instruction before changing other areas.
 
+## Closing
+- `ALL GAME.` / `ALL HEART.` / `ALL HERE.` (`src/components/home/closing-scene.tsx`) move with `useScroll` and `useTransform`. Lines 1 and 3 come from the left, line 2 from the right, and all three settle on the staggered layout when the section is centered. Opacity and scale ease with that same progress.
+- The `See you at the touchline.` card rises a short distance and fades in. The pixel pattern sits on its own layer and shifts with a transform only.
+- Type uses `clamp(1.75rem, 9vw, 7rem)` so the lines stay inside the viewport. `prefers-reduced-motion` keeps the settled layout with no movement. On a narrow screen the closing email field and button stack full width and stay tappable.
+
 ## Matchday path
 - `Make a day of it.` (`src/components/home/matchday-path.tsx`, `src/app/home-more.css`) is one sticky stage, `calc(100svh - var(--header-h))` at `top: var(--header-h)`. The heading stays in its own area. The card track is clipped below it, so a card cannot cover the heading while scrolling up or down.
 - Card shift, rotation and opacity come from `useScroll` and `useTransform` only. The pin is `calc(100svh + 80vh * 3)`. The dotted curve stays behind the cards, and the active card is centered. Below 768px the four cards stack in normal flow.
