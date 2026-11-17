@@ -10,12 +10,12 @@ import { Logo } from '@/components/logo';
 import { SafeImage } from '@/components/safe-image';
 import { Reveal } from '@/components/motion';
 import { ButtonLink, Card } from '@/components/ui';
+import { FanScene } from './fan-scene';
 
 const ScrollEffects = dynamic(() => import('./scroll-effects'), { ssr: false });
 
 export function HomeScenes({ articles }: { articles: Article[] }) {
   const stack = useRef<HTMLDivElement>(null);
-  const fans = useRef<HTMLElement>(null);
   return <>
     <section className="home-intro grid-paper" aria-labelledby="intro-title"><div className="container-shell intro-layout">
       <Reveal><p className="home-eyebrow">{copy.introLabel}</p><h2 id="intro-title" className="home-section-title max-w-xl">{copy.intro}</h2><p className="mt-6 max-w-xl leading-8 text-muted">{copy.introBody}</p></Reveal>
@@ -27,13 +27,7 @@ export function HomeScenes({ articles }: { articles: Article[] }) {
         <div className="stack-copy"><p className="home-eyebrow">{article.category.name} / {article.readingMinutes} {strings.minutes}</p><h3 className="line-clamp-3 font-display text-3xl font-semibold leading-tight tracking-[-.045em] md:text-4xl"><Link href={'/search?q=' + encodeURIComponent(article.title)}>{article.title}</Link></h3><p className="mt-5 line-clamp-3 leading-7">{article.excerpt}</p><p className="mt-6 text-sm">{article.author}</p><Link className="mt-8 inline-flex w-fit items-center gap-4 rounded-full border border-current px-6 py-3 font-semibold hover:opacity-65" href={'/search?q=' + encodeURIComponent(article.title)}>{strings.read}<span aria-hidden="true">↗</span></Link></div>
       </article>)}</div>}
     </section>
-    <section ref={fans} className="home-fans" aria-labelledby="fans-title"><div className="fans-stage">
-      <div className="fans-background" aria-hidden="true"><SafeImage src="/images/home-stadium.svg" alt="" fill sizes="100vw" className="object-cover" /></div><div className="fans-shade" />
-      <div className="fans-content container-shell"><p className="home-eyebrow text-white/80">{copy.fanLabel}</p><h2 id="fans-title" className="fans-headlines"><span>{copy.fanLeft}</span><span>{copy.fanRight}</span></h2>
-        <div className="fan-questions">{copy.questions.map((question, i) => <span className={'fan-pill fan-pill-' + i} key={question}>{question}</span>)}</div>
-        <div className="fans-footer"><p className="mb-5 text-lg text-white/80">{copy.fanBody}</p><ButtonLink href="/search">{copy.ask}</ButtonLink></div>
-      </div>
-    </div></section>
-    <ScrollEffects stack={stack} fans={fans} />
+    <FanScene />
+    <ScrollEffects stack={stack} />
   </>;
 }

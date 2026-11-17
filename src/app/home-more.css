@@ -19,6 +19,7 @@
 .paper-panel { min-width:0; min-height:330px; border-radius:24px; padding:1.75rem; box-shadow:0 20px 45px #123c2c12; }
 .paper-panel:nth-child(2) { margin-top:3rem; }.paper-panel:nth-child(3) { margin-top:6rem; }
 .pastel-0 { background:var(--blue); color:var(--pitch); }.pastel-1 { background:var(--coral); color:var(--pitch); }.pastel-2 { background:var(--mint); color:var(--pitch); }.pastel-3 { background:var(--lime); color:var(--pitch); }.pastel-4 { background:#eadff4; color:var(--pitch); }
+.more-table-scroll { overflow-x:auto; max-width:100%; }
 .more-table { width:100%; font-size:.85rem; border-collapse:collapse; text-align:left; }
 .more-table th,.more-table td { padding:.9rem .25rem; border-bottom:1px solid currentColor; border-color:#59706033; }
 .more-table thead { font-size:.7rem; text-transform:uppercase; }.more-table tbody th { font-weight:500; }.more-table td:last-child { font-weight:700; text-align:right; }

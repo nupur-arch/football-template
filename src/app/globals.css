@@ -5,6 +5,12 @@
 .dark { --canvas:var(--palette-dark-canvas,#0b1712); --ink:var(--palette-dark-ink,#f4f6ec); --muted:var(--palette-dark-muted,#a8b8aa); --surface:var(--palette-dark-surface,#14251c); --line:var(--palette-dark-line,#304338); --shadow-soft:0 12px 40px #0003; }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; scroll-padding-top:7rem; }
+html.lenis, html.lenis body { height:auto; }
+html.lenis { scroll-behavior:auto; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow:clip; }
+.lenis [data-lenis-prevent], .lenis [data-lenis-prevent-wheel], .lenis [data-lenis-prevent-touch], .lenis [data-lenis-prevent-vertical], .lenis [data-lenis-prevent-horizontal] { overscroll-behavior:contain; }
+.lenis.lenis-smooth iframe { pointer-events:none; }
+.lenis.lenis-autoToggle { transition-property:overflow; transition-duration:1ms; transition-behavior:allow-discrete; }
 body { margin:0; background:var(--canvas); color:var(--ink); font-size:16px; }
 ::selection { background:var(--lime); color:var(--pitch); }
 a,button,input,summary { -webkit-tap-highlight-color:transparent; }

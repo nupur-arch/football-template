@@ -33,16 +33,16 @@
 - S9 completed in `src/components/home/home-more.tsx` and `src/app/home-more.css`: leagues / competitions / categories now render as grouped tile stages with desktop slide-up group transitions, tab-style group controls, and readable stacked mobile/reduced-motion fallbacks.
 
 ## In progress
-- None. The dark pinned fan section (S5) scroll fix is complete.
+- None. Lenis smooth scroll and the S5 question-to-answer rebuild are complete.
 
 ## Next
-- Stop after this fix. Await an explicit next-step instruction before changing other areas.
+- Stop after this step. Await an explicit next-step instruction before changing other areas.
 
-## S5 pin fix
-- `src/app/home.css`: pin length is 220vh; the sticky stage and its photo are `calc(100svh - var(--header-h))` with `object-fit: cover` inside the stage. Pills use fixed percent positions. Mobile and reduced motion stay unpinned.
-- `src/app/globals.css`: `--header-h: 5rem` keeps the headlines below the sticky header.
-- Mojibake `â€` removed in `src/content/strings.ts` (`Who’s`) and `src/components/home/home-interactive.tsx` (en dash). Files are UTF-8.
-- Checked in the browser at 1440×700, 1440×900, and 390×844: scroll moves both ways, the photo stays inside the stage, pills and the CTA do not overlap.
+## Smooth scroll and S5 rebuild
+- Dead zone: the old pin was 220vh while the pill stagger and darkness finished early, and `useScroll` offset `start end` / `end end` included a long approach where the stage was stuck and nothing moved. The pin is now the whole animation: progress 0–1 maps to `start start` / `end end`, so a wheel flick always moves something.
+- `lenis` 1.3.27 in root mode (`src/components/smooth-scroll.tsx`), lerp 0.1, native touch, anchors on, disabled when `prefers-reduced-motion` is set. Route changes scroll to the hash or the top. `html.lenis` rules are in `src/app/globals.css`. `data-lenis-prevent` is on the search dropdown, mega-menu, dialog/drawer, story rail and table scroller. The header calls `stop()` / `start()` while the drawer or search overlay is open. No scroll-snap.
+- S5 (`src/components/home/fan-scene.tsx`) is one sticky stage, `calc(100svh - var(--header-h))`, pinned 220vh on desktop and 160vh on mobile. Scroll progress drives the stadium fade, per-letter headlines, curved pill flight, 3D answer flip, closing line and button. Copy and positions live in `fanExchanges`. Mobile shows 4 pills and no pointer parallax. Reduced motion and no-JS show the answer chips unpinned. Opacity stays on the JS scroll value so it tracks Lenis; the scroll-timeline path was leaving fades stuck.
+- Browser check at 1440×700, 1440×900, 390×700 and 390×900: headlines sit below the header, chips do not overlap or leave the stage, every progress band changes a visible property, and the other home sections still scroll.
 
 ## Decisions
 - This is a local repository implementation; no hosting or publication.
@@ -55,5 +55,5 @@
 - Site identity/navigation/palette settings are in `src/content/site.config.ts`; shared English copy is in `src/content/strings.ts`.
 - Search results expose expandable article markdown as a foundation preview; dedicated article/team/player pages remain deferred.
 - Public environment variables are embedded at build time; rebuild after changing API mode, base URL or site URL.
-- Browser visual verification is unavailable: browser host/native pipe are not connected. Use production build and HTTP checks; no visual QA is claimed.
+- Earlier steps had no browser host. The Lenis and S5 rebuild step was checked in the browser at 1440×700, 1440×900, 390×700 and 390×900.
 - StoryDeck autoplay/live-region state in `src/components/home/home-interactive.tsx` must stay SSR-stable on the first render; motion-dependent running state now activates only after mount to avoid hydration mismatches.

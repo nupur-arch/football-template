@@ -116,10 +116,9 @@ function property(selector, name, width, reduced) {
 for (const width of [320, 375, 767, 768, 1440]) for (const reduced of [false, true]) {
   const staticLayout = width < 768 || reduced;
   assert.equal(property('.stack-card', 'position', width, reduced), staticLayout ? 'relative' : 'sticky');
-  assert.equal(property('.fans-stage', 'position', width, reduced), staticLayout ? 'relative' : 'sticky');
-  assert.equal(property('.home-fans', 'height', width, reduced), staticLayout ? 'auto' : '220vh');
+  assert.equal(property('.qa-live .fans-stage', 'position', width, reduced), reduced ? 'relative' : 'sticky');
+  assert.equal(property('.home-fans.qa-live', 'height', width, reduced), reduced ? 'auto' : width < 768 ? '160vh' : '220vh');
   if (staticLayout) assert.equal(property('.stack-card', 'transform', width, reduced), 'none');
-  if (width < 768) assert.equal(property('.fan-pill', 'position', width, reduced), 'static');
   checks++;
 }
 console.log(`PASS: ${checks} carousel synchronization, autoplay, hover/focus/pause, swipe, hero and responsive/reduced-motion CSS checks. Browser rendering remains unverified.`);
@@ -130,30 +129,22 @@ for (const mode of [{ width: 1440, reduced: false }, { width: 375, reduced: fals
   let enabled = mode.width >= 768 && !mode.reduced;
   const style = () => ({ removeProperty(name) { delete this[name]; }, setProperty(name, value) { this[name] = value; } });
   const cards = [0, 1, 2, 3].map(() => ({ style: style(), getBoundingClientRect: () => ({ top: 350 }) }));
-  const pills = [0, 1, 2, 3, 4, 5].map(() => ({ style: style() }));
   const stack = { current: { querySelectorAll: () => cards } };
-  const fans = { current: { querySelectorAll: () => pills, style: style() } };
   let mediaChange;
   const media = { get matches() { return enabled; }, addEventListener(_, fn) { mediaChange = fn; }, removeEventListener() {} };
   const effects = compile('src/components/home/scroll-effects.tsx', {
     react: { useEffect: fn => fn() },
     'framer-motion': { useScroll: () => ({ scrollY: 'scroll', scrollYProgress: 'progress' }), useTransform: () => 'darkness', useMotionValueEvent: (value, _, fn) => { listeners[value] = fn; } },
   }, { window: { innerHeight: 900, matchMedia: () => media } });
-  effects.default({ stack, fans });
-  listeners.scroll(1000); listeners.progress(.8); listeners.darkness(1);
+  effects.default({ stack });
+  listeners.scroll(1000);
   if (enabled) {
     assert.match(cards[0].style.transform, /scale\(0\.9/);
     assert.ok(Number(cards[0].style.opacity) < 1);
-    assert.equal(pills[5].style.opacity, '1');
-    assert.equal(fans.current.style['--fan-darkness'], '1');
     enabled = false; mediaChange();
     assert.equal(cards[0].style.transform, undefined);
-    assert.equal(pills[0].style.opacity, undefined);
-    assert.equal(fans.current.style['--fan-darkness'], undefined);
   } else {
     assert.equal(cards[0].style.transform, undefined);
-    assert.equal(pills[0].style.opacity, undefined);
-    assert.equal(fans.current.style['--fan-darkness'], undefined);
   }
   checks++;
 }

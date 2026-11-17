@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { DM_Sans, Space_Grotesk } from 'next/font/google';
 import { Providers } from '@/components/providers';
+import { SmoothScrollProvider } from '@/components/smooth-scroll';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { siteConfig } from '@/content/site.config';
@@ -14,4 +15,4 @@ for (const [name, value] of Object.entries(siteConfig.colors)) {
   else for (const [token, color] of Object.entries(value)) colorVariables['--palette-' + name + '-' + token] = color;
 }
 export const metadata:Metadata={metadataBase:new URL(siteConfig.url),title:{default:siteConfig.name+' — '+strings.tagline,template:'%s | '+siteConfig.name},description:siteConfig.description,alternates:{canonical:'/'},openGraph:{title:siteConfig.name,description:siteConfig.description,type:'website',locale:siteConfig.locale}};
-export default function RootLayout({children}:{children:React.ReactNode}){return <html lang={siteConfig.locale} style={colorVariables as React.CSSProperties} suppressHydrationWarning><body className={body.variable+' '+display.variable+' font-sans antialiased'}><Providers><a href="#main" className="fixed left-4 top-3 z-[60] -translate-y-24 rounded-full bg-lime px-5 py-3 text-pitch focus:translate-y-0">{strings.skip}</a><Header/>{children}<Footer/></Providers></body></html>}
+export default function RootLayout({children}:{children:React.ReactNode}){return <html lang={siteConfig.locale} style={colorVariables as React.CSSProperties} suppressHydrationWarning><body className={body.variable+' '+display.variable+' font-sans antialiased'}><Providers><SmoothScrollProvider><a href="#main" className="fixed left-4 top-3 z-[60] -translate-y-24 rounded-full bg-lime px-5 py-3 text-pitch focus:translate-y-0">{strings.skip}</a><Header/>{children}<Footer/></SmoothScrollProvider></Providers></body></html>}

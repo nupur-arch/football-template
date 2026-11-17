@@ -19,7 +19,7 @@ function Heading({ label, title, id }: { label?: string; title: string; id?: str
   return <div className="more-heading"><p className="home-eyebrow">{label}</p><h2 id={id} className="home-section-title">{title}</h2></div>;
 }
 function Table({ rows }: { rows: Standing[] }) {
-  return rows.length ? <table className="more-table"><caption className="sr-only">{c.table}</caption><thead><tr><th scope="col">#</th><th scope="col">{strings.teams}</th><th scope="col">{c.played}</th><th scope="col">{c.points}</th></tr></thead><tbody>{rows.slice(0, 4).map(row => <tr key={row.id}><td>{row.rank}</td><th scope="row"><Link href={search(row.team.name)}>{row.team.name}</Link></th><td>{row.played}</td><td>{row.points}</td></tr>)}</tbody></table> : <p>{strings.empty}</p>;
+  return rows.length ? <div className="more-table-scroll" data-lenis-prevent><table className="more-table"><caption className="sr-only">{c.table}</caption><thead><tr><th scope="col">#</th><th scope="col">{strings.teams}</th><th scope="col">{c.played}</th><th scope="col">{c.points}</th></tr></thead><tbody>{rows.slice(0, 4).map(row => <tr key={row.id}><td>{row.rank}</td><th scope="row"><Link href={search(row.team.name)}>{row.team.name}</Link></th><td>{row.played}</td><td>{row.points}</td></tr>)}</tbody></table></div> : <p>{strings.empty}</p>;
 }
 function Scores({ matches }: { matches: Match[] }) {
   return <div className="more-scores">{matches.length ? matches.slice(0, 2).map(match => <div key={match.id}><p className="home-eyebrow">{match.competition} · {match.status}</p><div className="score-line"><span>{match.homeTeam.shortName}</span><strong>{match.homeScore ?? '–'} : {match.awayScore ?? '–'}</strong><span>{match.awayTeam.shortName}</span></div></div>) : <p>{strings.empty}</p>}</div>;

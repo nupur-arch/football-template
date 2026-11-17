@@ -14,7 +14,14 @@ export const homeCopy = {
   latestLabel: 'Fresh off the pitch', latest: 'The latest word.', allNews: 'Explore all news',
   fanLabel: 'Every fan. Every question.', fanLeft: 'Big moments.', fanRight: 'Bigger conversations.',
   fanBody: 'Your game. Your questions. All in one place.',
-  questions: ['Who scored?', 'When is kickoff?', 'Where is the table?', 'Who’s on the move?', 'What a finish!', 'Who starts tonight?'],
+  fanExchanges: [
+    { question: 'Who scored?', answer: 'Saka 67′', x: 22, y: 30, rotate: -6, arc: 9 },
+    { question: 'When is kickoff?', answer: 'Sat 17:30', x: 78, y: 28, rotate: 5, arc: -8 },
+    { question: 'Where is the table?', answer: 'Arsenal 1st', x: 26, y: 58, rotate: 4, arc: 7 },
+    { question: 'Who starts tonight?', answer: 'Rice back in', x: 74, y: 56, rotate: -5, arc: -9 },
+    { question: 'What a finish!', answer: 'Last-kick winner', x: 38, y: 80, rotate: -4, arc: 6 },
+    { question: 'Who’s on the move?', answer: 'Wirtz linked', x: 64, y: 78, rotate: 6, arc: -7 },
+  ],
   ask: 'Find your answer', fixtureNote: 'Illustrative fixture data',
 } as const;
 export const moreCopy = {
