@@ -1,0 +1,101 @@
+/* Shared hover and micro-interactions. Movement only under hover-capable pointers. */
+
+.hover-card { transition: transform .3s var(--ease), box-shadow .3s var(--ease); }
+.hover-card img, .hover-card .hover-zoom { transition: transform .3s var(--ease); }
+.hover-press { transition: transform .25s var(--ease); }
+.hover-press svg { transition: transform .3s var(--ease); }
+.hover-sheen { position: relative; overflow: hidden; }
+.hover-sheen::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(110deg, transparent 32%, #ffffff66 50%, transparent 68%); transform: translateX(-130%); }
+.hover-link { background-image: linear-gradient(currentColor, currentColor); background-repeat: no-repeat; background-position: 0 100%; background-size: 0 1px; transition: background-size .3s var(--ease), color .3s var(--ease), transform .3s var(--ease); }
+.footer-link { display: inline-flex; transition: transform .3s var(--ease), color .3s var(--ease); }
+.icon-btn svg { transition: transform .3s var(--ease); }
+.theme-swap { position: relative; display: grid; width: 19px; height: 19px; }
+.theme-swap svg { grid-area: 1 / 1; transition: transform .35s var(--ease), opacity .35s var(--ease); }
+.theme-swap[data-mode="moon"] .theme-sun { opacity: 0; transform: rotate(-90deg) scale(.6); }
+.theme-swap[data-mode="sun"] .theme-moon { opacity: 0; transform: rotate(90deg) scale(.6); }
+.theme-swap[data-mode="sun"] .theme-sun { opacity: 1; transform: rotate(180deg); }
+.nav-pill { position: absolute; z-index: 0; border-radius: 999px; background: var(--line); }
+.nav-pill.nav-current { inset: -6px -10px; }
+.nav-pill.nav-item { inset: 0; border-radius: 12px; }
+.slide-tab { position: relative; }
+.slide-tab > span, .menu-item > span, .menu-item > svg { position: relative; z-index: 1; }
+.slide-pill { position: absolute; inset: 0; z-index: 0; border-radius: 999px; background: var(--ink); }
+.stat-toggle .slide-pill { background: var(--pitch); }
+.field-label { display: inline-block; transition: transform .25s var(--ease), color .25s var(--ease); }
+.field-input, .field-shell input { transition: box-shadow .3s var(--ease); }
+.field-input::placeholder, .field-shell input::placeholder { transition: opacity .25s var(--ease), transform .25s var(--ease); }
+.field-shell { transition: box-shadow .3s var(--ease); }
+.field-shell > svg { transition: transform .3s var(--ease); }
+.menu-pop { animation: menu-pop .3s var(--ease) both; }
+.menu-item { animation: menu-item .3s var(--ease) both; }
+.score-roll { display: inline-block; animation: score-roll .3s var(--ease); }
+.live-dot { transform-origin: center; }
+.image-frame { position: relative; display: inline-block; overflow: hidden; vertical-align: middle; }
+.image-shimmer { position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(100deg, transparent 20%, #fff8 45%, transparent 70%); background-size: 200% 100%; animation: image-shimmer 1.1s var(--ease) infinite; }
+.image-pending { opacity: 0; }
+.image-frame.is-shown img { opacity: 1; transition: opacity .3s var(--ease); }
+.check-draw path { stroke-dasharray: 24; stroke-dashoffset: 24; animation: check-draw .35s var(--ease) forwards; }
+.smooth-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s var(--ease); }
+.home-faq[open] .smooth-panel, .smooth-details[open] .smooth-panel { grid-template-rows: 1fr; }
+.smooth-panel > * { overflow: hidden; }
+.faq-symbol { position: relative; display: inline-block; width: 1rem; height: 1rem; flex: 0 0 auto; }
+.faq-symbol i { position: absolute; left: 0; top: 50%; width: 1rem; height: 2px; margin-top: -1px; background: currentColor; }
+.faq-symbol i:last-child { left: 50%; top: 0; width: 2px; height: 1rem; margin: 0 0 0 -1px; transition: transform .3s var(--ease); }
+.home-faq[open] .faq-symbol i:last-child, .smooth-details[open] .faq-symbol i:last-child { transform: scaleY(0); }
+.cross-fade { animation: cross-fade .3s var(--ease); }
+.more-table thead th::after { content: ""; display: inline-block; margin-left: .35rem; border: 4px solid transparent; border-top-color: currentColor; vertical-align: middle; opacity: .35; transition: transform .25s var(--ease), opacity .25s var(--ease); }
+.more-table tbody td, .more-table tbody th, .more-leaders li { transition: transform .25s var(--ease), box-shadow .25s var(--ease); }
+
+@keyframes menu-pop { from { opacity: 0; transform: translateX(-50%) translateY(8px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+@keyframes menu-item { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes score-roll { from { opacity: 0; transform: translateY(80%); } to { opacity: 1; transform: none; } }
+@keyframes live-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(1.6); } }
+@keyframes image-shimmer { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+@keyframes check-draw { to { stroke-dashoffset: 0; } }
+@keyframes cross-fade { from { opacity: 0; } to { opacity: 1; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .live-dot { animation: live-pulse 1.4s var(--ease) infinite; }
+  .hover-press:active:not(:disabled) { transform: scale(.97); }
+  .hover-card:focus-visible, .hover-press:focus-visible, .footer-link:focus-visible, .icon-btn:focus-visible, .hover-link:focus-visible { transform: translateY(-4px); }
+  .hover-press:focus-visible { transform: scale(1.03); }
+  .hover-link:focus-visible { transform: none; background-size: 100% 1px; }
+  .icon-btn:focus-visible svg { transform: scale(1.12); }
+  .field-input:focus-visible, .field-shell:focus-within { box-shadow: 0 0 0 4px color-mix(in srgb, var(--lime) 75%, transparent); }
+  .more-table tbody tr:focus-within td, .more-table tbody tr:focus-within th, .more-leaders li:focus-within { transform: translateX(4px); }
+  .more-table tbody tr:focus-within td:first-child { box-shadow: inset 3px 0 0 var(--lime); }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .hover-card:hover, .hover-card:focus-within { transform: translateY(-4px); box-shadow: 0 20px 46px #123c2c2e; }
+  .hover-card:hover img, .hover-card:focus-within img, .hover-card:hover .hover-zoom, .hover-card:focus-within .hover-zoom { transform: scale(1.05); }
+  .hover-card:hover > svg:last-child, .hover-card:focus-visible > svg:last-child, .hover-card:hover .hover-press svg, .hover-card:focus-within .hover-press svg { transform: rotate(45deg); }
+  .hover-press:hover:not(:disabled) { transform: scale(1.03); }
+  .hover-press:hover svg, .hover-press:focus-visible svg { transform: translateX(4px); }
+  .hover-sheen:hover::after, .hover-sheen:focus-visible::after { transform: translateX(130%); transition: transform .4s var(--ease); }
+  .hover-link:hover { background-size: 100% 1px; }
+  .footer-link:hover { transform: translateY(-3px); color: var(--lime); }
+  .icon-btn:hover svg { transform: scale(1.12); }
+  .field-shell:focus-within .field-label { transform: translateY(-2px); }
+  .field-shell:focus-within > svg { transform: scale(1.12); }
+  .field-shell input:focus::placeholder, .field-input:focus::placeholder { opacity: .45; transform: translateX(6px); }
+  .more-table thead th:hover::after { opacity: 1; transform: translateY(3px); }
+  .more-table tbody tr:hover td, .more-table tbody tr:hover th, .more-leaders li:hover { transform: translateX(4px); }
+  .more-table tbody tr:hover td:first-child { box-shadow: inset 3px 0 0 var(--lime); }
+  .hover-press:active:not(:disabled) { transform: scale(.97); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hover-card:hover, .hover-card:focus-within, .hover-card:focus-visible,
+  .hover-press:hover, .hover-press:active, .hover-press:focus-visible,
+  .footer-link:hover, .footer-link:focus-visible,
+  .hover-card img, .hover-press svg, .icon-btn svg, .theme-swap svg,
+  .more-table tbody td, .more-table tbody th, .more-leaders li, .score-roll, .menu-item {
+    transform: none !important;
+    animation: none !important;
+  }
+  .check-draw path { stroke-dashoffset: 0; animation: none; }
+  .image-pending { opacity: 1; }
+  .hover-link:hover, .hover-link:focus-visible { background-size: 100% 1px; }
+  .footer-link:hover, .footer-link:focus-visible { color: var(--lime); }
+}

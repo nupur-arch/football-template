@@ -7,6 +7,7 @@ import { Footer } from '@/components/footer';
 import { siteConfig } from '@/content/site.config';
 import { strings } from '@/content/strings';
 import './globals.css';
+import './hover.css';
 const body=DM_Sans({subsets:['latin'],variable:'--font-body',display:'swap'});
 const display=Space_Grotesk({subsets:['latin'],variable:'--font-display',display:'swap'});
 const colorVariables: Record<string, string> = {};

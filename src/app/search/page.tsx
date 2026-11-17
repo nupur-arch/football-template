@@ -32,7 +32,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             <p className="mb-3 text-xs uppercase tracking-widest text-muted">{article.category.name}</p>
             <h3 className="line-clamp-3 font-display text-2xl font-semibold tracking-tight">{article.title}</h3>
             <p className="mt-3 leading-7 text-muted">{article.excerpt}</p>
-            <details className="mt-4"><summary className="w-fit rounded-full py-2 text-sm font-semibold hover:text-muted">{strings.read}</summary><MarkdownContent content={article.content} /></details>
+            <details className="smooth-details mt-4"><summary className="hover-link inline-flex items-center gap-2 rounded-full py-2 text-sm font-semibold">{strings.read}<span aria-hidden="true" className="faq-symbol"><i /><i /></span></summary><div className="smooth-panel"><MarkdownContent content={article.content} /></div></details>
           </Card>)}</div>
         </div>}
         {results.teams.length > 0 && <div>

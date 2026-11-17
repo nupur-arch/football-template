@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import type { Match } from '@/types';
 import { strings } from '@/content/strings';
 import { homeCopy as copy } from '@/content/strings';
+import { ScoreRoll } from '@/components/hover';
 
 const number = (value: number) => String(value).padStart(2, '0');
 
@@ -17,5 +18,5 @@ function Countdown({ kickoff }: { kickoff: string }) {
 export function MatchStrip({ matches }: { matches: Match[] }) {
   const live = matches.filter(match => match.status === 'live');
   const next = matches.filter(match => match.status === 'scheduled').sort((a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff))[0];
-  return <section className="container-shell match-strip" aria-label={strings.score}><div className="match-live"><p className="home-eyebrow"><span className="live-dot" />{copy.live}</p>{live.length ? <div className="live-matches">{live.map(match => <div key={match.id}><p className="text-xs text-muted">{match.competition}</p><p className="mt-2 font-display text-xl font-semibold">{match.homeTeam.shortName} <span className="mx-2 tabular-nums">{match.homeScore ?? '–'} : {match.awayScore ?? '–'}</span> {match.awayTeam.shortName}</p></div>)}</div> : <p className="text-muted">{copy.noLive}</p>}<p className="mt-3 text-xs text-muted">{copy.fixtureNote}</p></div><div className="next-match"><p className="home-eyebrow">{copy.nextMatch}</p>{next ? <><p className="mb-2 font-semibold">{next.homeTeam.shortName} / {next.awayTeam.shortName}</p><Countdown kickoff={next.kickoff} /></> : <p className="text-muted">{copy.noNext}</p>}</div></section>;
+  return <section className="container-shell match-strip" aria-label={strings.score}><div className="match-live"><p className="home-eyebrow"><span className="live-dot" />{copy.live}</p>{live.length ? <div className="live-matches">{live.map(match => <div key={match.id}><p className="text-xs text-muted">{match.competition}</p><p className="mt-2 font-display text-xl font-semibold">{match.homeTeam.shortName} <span className="mx-2 tabular-nums"><ScoreRoll value={String(match.homeScore ?? '–')} /> : <ScoreRoll value={String(match.awayScore ?? '–')} /></span> {match.awayTeam.shortName}</p></div>)}</div> : <p className="text-muted">{copy.noLive}</p>}<p className="mt-3 text-xs text-muted">{copy.fixtureNote}</p></div><div className="next-match"><p className="home-eyebrow">{copy.nextMatch}</p>{next ? <><p className="mb-2 font-semibold">{next.homeTeam.shortName} / {next.awayTeam.shortName}</p><Countdown kickoff={next.kickoff} /></> : <p className="text-muted">{copy.noNext}</p>}</div></section>;
 }

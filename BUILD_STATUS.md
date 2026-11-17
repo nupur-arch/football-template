@@ -38,6 +38,20 @@
 ## Next
 - Stop after this step. Await an explicit next-step instruction before changing other areas.
 
+## Hover polish
+- Shared utilities: `src/app/hover.css` and `src/components/hover.tsx`. Movement is limited to transform, opacity and shadow, 0.25–0.4s with `--ease`, only inside `@media (hover: hover)`, with a matching `:focus-visible`. Reduced motion keeps color shifts and drops movement.
+- Cards (`Card`, search news/team/player cards, stat blocks, football tiles): lift 4px, shadow grow, image zoom 1.05, arrow rotates 45deg.
+- `Button` / `ButtonLink`: scale 1.03 on hover and 0.97 on press, arrow slides, lime buttons sweep a sheen.
+- Text links (footer, tables, leaders, search, drawer): underline grows from the left. Footer links also lift.
+- Header nav: sliding `layoutId` pill. Mega-menu fades and slides 8px, items stagger 30ms, hovered item gets a pill.
+- Tables and leader rows: lime left bar and a 4px content shift. Header arrows ease on hover.
+- Match strip and score lines: live dot pulse, score digits roll when the value changes (`ScoreRoll`).
+- League tabs, stat toggle and tile tabs: sliding active pill. League table and toggle content cross-fade.
+- Search and newsletter fields: focus ring, label and placeholder shift. Saved newsletter draws a check.
+- Search and theme icon buttons: search icon scales, sun/moon cross-fade and rotate.
+- Non-fill images (`SafeImage`): shimmer, then fade in. FAQ and search details: height ease and plus-to-minus morph.
+- Left unchanged: story gallery, stacking latest cards, fan questions, feature showcase scroll, matchday path, closing typography.
+
 ## Closing
 - `ALL GAME.` / `ALL HEART.` / `ALL HERE.` (`src/components/home/closing-scene.tsx`) move with `useScroll` and `useTransform`. Lines 1 and 3 come from the left, line 2 from the right, and all three settle on the staggered layout when the section is centered. Each line zooms from 0.38 up to 1.36, then back to 1, anchored on its own side so the swell stays in the viewport.
 - The `See you at the touchline.` card rises a short distance and fades in. The pixel pattern sits on its own layer and shifts with a transform only.
