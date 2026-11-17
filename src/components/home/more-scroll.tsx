@@ -38,18 +38,6 @@ export default function MoreScroll({ root, onFeature }: { root: RefObject<HTMLDi
         tile.style.opacity = String(.25 + stagger * .75);
       });
     });
-    const path = progress('.matchday-section', true);
-    const track = node.querySelector<HTMLElement>('.matchday-track');
-    const cards = node.querySelectorAll<HTMLElement>('.path-card');
-    const first = cards[0];
-    if (track && first) {
-      track.style.transform = `translateX(${-path * (first.offsetWidth + 32) * 3}px)`;
-      cards.forEach((card, i) => {
-        const distance = Math.min(1, Math.abs(path * 3 - i));
-        card.style.transform = `rotate(${(i % 2 ? 1 : -1) * distance * 5}deg) scale(${1 - distance * .06})`;
-        card.style.opacity = String(1 - distance * .3);
-      });
-    }
     const closing = progress('.closing-section');
     node.querySelectorAll<HTMLElement>('.closing-word').forEach((word, i) => { word.style.transform = `translateX(${(1 - closing) * (i % 2 ? -1 : 1) * 90}px)`; });
   };
@@ -61,7 +49,7 @@ export default function MoreScroll({ root, onFeature }: { root: RefObject<HTMLDi
       if (!node) return;
       node.classList.toggle('scroll-enhanced', media.matches);
       if (!media.matches) {
-        node.querySelectorAll<HTMLElement>('.paper-panel,.paper-content,.football-tile,.matchday-track,.path-card,.closing-word,.center-transition').forEach(element => { element.style.removeProperty('transform'); element.style.removeProperty('opacity'); });
+        node.querySelectorAll<HTMLElement>('.paper-panel,.paper-content,.football-tile,.closing-word,.center-transition').forEach(element => { element.style.removeProperty('transform'); element.style.removeProperty('opacity'); });
         node.querySelectorAll<HTMLElement>('[data-count]').forEach(counter => { counter.textContent = counter.dataset.count ?? '0'; });
       }
     };

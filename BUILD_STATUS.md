@@ -38,6 +38,10 @@
 ## Next
 - Stop after this step. Await an explicit next-step instruction before changing other areas.
 
+## Matchday path
+- `Make a day of it.` (`src/components/home/matchday-path.tsx`, `src/app/home-more.css`) is one sticky stage, `calc(100svh - var(--header-h))` at `top: var(--header-h)`. The heading stays in its own area. The card track is clipped below it, so a card cannot cover the heading while scrolling up or down.
+- Card shift, rotation and opacity come from `useScroll` and `useTransform` only. The pin is `calc(100svh + 80vh * 3)`. The dotted curve stays behind the cards, and the active card is centered. Below 768px the four cards stack in normal flow.
+
 ## Feature showcase
 - `Stay a step closer.` (`src/app/home-more.css`) sticks in a stage of `calc(100svh - var(--header-h))` at `top: var(--header-h)`. `--header-h` is `5rem` in `src/app/globals.css`. The left copy and the pastel card stack are centered in that stage, and the stack height is clamped so every row stays inside the card.
 - The pin is `calc(100svh + 80vh * 5)`, about 80vh of scroll per item. `01 / 05` through `05 / 05` still follow that progress. Below 768px the cards stack in normal flow.
