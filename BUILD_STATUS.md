@@ -39,7 +39,7 @@
 - Stop after this step. Await an explicit next-step instruction before changing other areas.
 
 ## Closing
-- `ALL GAME.` / `ALL HEART.` / `ALL HERE.` (`src/components/home/closing-scene.tsx`) move with `useScroll` and `useTransform`. Lines 1 and 3 come from the left, line 2 from the right, and all three settle on the staggered layout when the section is centered. Opacity and scale ease with that same progress.
+- `ALL GAME.` / `ALL HEART.` / `ALL HERE.` (`src/components/home/closing-scene.tsx`) move with `useScroll` and `useTransform`. Lines 1 and 3 come from the left, line 2 from the right, and all three settle on the staggered layout when the section is centered. Each line zooms from 0.38 up to 1.36, then back to 1, anchored on its own side so the swell stays in the viewport.
 - The `See you at the touchline.` card rises a short distance and fades in. The pixel pattern sits on its own layer and shifts with a transform only.
 - Type uses `clamp(1.75rem, 9vw, 7rem)` so the lines stay inside the viewport. `prefers-reduced-motion` keeps the settled layout with no movement. On a narrow screen the closing email field and button stack full width and stay tappable.
 

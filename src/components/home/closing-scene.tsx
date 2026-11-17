@@ -9,9 +9,13 @@ const clamp = (value: number) => Math.max(0, Math.min(1, value));
 function ClosingLine({ index, text, progress, live }: { index: number; text: string; progress: MotionValue<number>; live: boolean }) {
   const fromLeft = index % 2 === 0;
   const x = useTransform(progress, value => `${(fromLeft ? -1 : 1) * (1 - clamp(value)) * 3}vw`);
-  const scale = useTransform(progress, value => 0.96 + clamp(value) * 0.04);
-  const opacity = useTransform(progress, value => 0.4 + clamp(value) * 0.6);
-  return <motion.div className="closing-word" style={live ? { x, scale, opacity } : undefined}>{text}</motion.div>;
+  const scale = useTransform(progress, value => {
+    const t = clamp(value);
+    if (t < 0.68) return 0.38 + (t / 0.68) * 0.98;
+    return 1.36 - ((t - 0.68) / 0.32) * 0.36;
+  });
+  const opacity = useTransform(progress, value => 0.35 + clamp(value) * 0.65);
+  return <motion.div className="closing-word" style={live ? { x, scale, opacity, originX: fromLeft ? 0 : 1, originY: 0.5 } : undefined}>{text}</motion.div>;
 }
 
 export function ClosingScene({ children }: { children: ReactNode }) {
