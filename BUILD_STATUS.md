@@ -33,16 +33,22 @@
 - S9 completed in `src/components/home/home-more.tsx` and `src/app/home-more.css`: leagues / competitions / categories now render as grouped tile stages with desktop slide-up group transitions, tab-style group controls, and readable stacked mobile/reduced-motion fallbacks.
 
 ## In progress
-- None. The top hero is now a scroll-driven 3D story cylinder.
+- None.
 
 ## Next
 - Stop after this step. Await an explicit next-step instruction before changing other areas.
 
+## Feature showcase
+- `Stay a step closer.` (`src/app/home-more.css`) sticks in a stage of `calc(100svh - var(--header-h))` at `top: var(--header-h)`. `--header-h` is `5rem` in `src/app/globals.css`. The left copy and the pastel card stack are centered in that stage, and the stack height is clamped so every row stays inside the card.
+- The pin is `calc(100svh + 80vh * 5)`, about 80vh of scroll per item. `01 / 05` through `05 / 05` still follow that progress. Below 768px the cards stack in normal flow.
+- `.home-more` no longer uses `overflow: clip`, which was the ancestor breaking this sticky. The matchday track clips its own horizontal overflow.
+
 ## Story cylinder
 - Replaced the rotating hero and the top-stories deck with one pinned gallery (`src/components/home/story-gallery.tsx`). `getBanners()` now returns the 20 featured stories (`src/mocks/index.ts`).
-- The stage is `calc(100svh - var(--header-h))`, pinned 350vh on desktop and 250vh on mobile. Scroll progress 0–1 turns the cylinder through all 20 cards; `SCROLL_DIRECTION` is `-1` so scrolling down moves the track left to right. The wheel is pulled back by its radius so perspective 1200 and radius 1100 keep the center card at its real size.
+- The stage is `calc(100svh - var(--header-h))`, pinned 1100vh on desktop and 900vh on mobile so one wheel notch moves about a third of a card. Scroll progress 0–1 turns the cylinder through all 20 cards; `SCROLL_DIRECTION` is `-1` so scrolling down moves the track left to right. The wheel is pulled back by its radius so perspective 1200 and radius 1100 keep the center card at its real size.
 - Reduced motion and no-JS keep a native horizontal row. The first three images are priority. All 20 links are in the server HTML. Lenis is unchanged.
 - Browser check at 1440×700, 1440×900, 390×700 and 390×900: the counter tracks the centered card, five cards show on desktop and three on mobile, the title and button stay inside the stage, and the match strip follows when the pin ends.
+- The stage does not clip the 3D wheel. While the page is moving, the wheel tracks that scroll directly. After it has been still, it eases onto the nearest card and ignores the tiny leftover scroll updates, so the card does not rock. Hover lifts on its own ease.
 
 ## Smooth scroll and S5 rebuild
 - Dead zone: the old pin was 220vh while the pill stagger and darkness finished early, and `useScroll` offset `start end` / `end end` included a long approach where the stage was stuck and nothing moved. The pin is now the whole animation: progress 0–1 maps to `start start` / `end end`, so a wheel flick always moves something.
