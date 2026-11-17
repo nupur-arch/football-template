@@ -33,10 +33,16 @@
 - S9 completed in `src/components/home/home-more.tsx` and `src/app/home-more.css`: leagues / competitions / categories now render as grouped tile stages with desktop slide-up group transitions, tab-style group controls, and readable stacked mobile/reduced-motion fallbacks.
 
 ## In progress
-- None. Lenis smooth scroll and the S5 question-to-answer rebuild are complete.
+- None. The top hero is now a scroll-driven 3D story cylinder.
 
 ## Next
 - Stop after this step. Await an explicit next-step instruction before changing other areas.
+
+## Story cylinder
+- Replaced the rotating hero and the top-stories deck with one pinned gallery (`src/components/home/story-gallery.tsx`). `getBanners()` now returns the 20 featured stories (`src/mocks/index.ts`).
+- The stage is `calc(100svh - var(--header-h))`, pinned 350vh on desktop and 250vh on mobile. Scroll progress 0–1 turns the cylinder through all 20 cards; `SCROLL_DIRECTION` is `-1` so scrolling down moves the track left to right. The wheel is pulled back by its radius so perspective 1200 and radius 1100 keep the center card at its real size.
+- Reduced motion and no-JS keep a native horizontal row. The first three images are priority. All 20 links are in the server HTML. Lenis is unchanged.
+- Browser check at 1440×700, 1440×900, 390×700 and 390×900: the counter tracks the centered card, five cards show on desktop and three on mobile, the title and button stay inside the stage, and the match strip follows when the pin ends.
 
 ## Smooth scroll and S5 rebuild
 - Dead zone: the old pin was 220vh while the pill stagger and darkness finished early, and `useScroll` offset `start end` / `end end` included a long approach where the stage was stuck and nothing moved. The pin is now the whole animation: progress 0–1 maps to `start start` / `end end`, so a wheel flick always moves something.

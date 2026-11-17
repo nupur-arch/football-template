@@ -20,84 +20,28 @@ function compile(file, imports, globals = {}) {
   return compiled.exports;
 }
 Object.assign(copy, compile('src/content/strings.ts', {}));
-const articles = Array.from({ length: 20 }, (_, i) => ({ id: 'a' + i, title: 'Story ' + (i + 1), image: '/images/fallback.svg', category: { name: 'Analysis' }, author: 'Editorial', readingMinutes: 4, excerpt: 'A football story' }));
 const walk = node => !node || typeof node !== 'object' ? [] : Array.isArray(node) ? node.flatMap(walk) : [node, ...walk(node.props?.children)];
-const text = node => node == null ? '' : typeof node !== 'object' ? String(node) : Array.isArray(node) ? node.map(text).join('') : text(node.props?.children);
 let checks = 0;
-function harness(component, reduced = false) {
-  let slots = [], cursor = 0, pending = [], tree, dirty = false, clock = 0, timerId = 0;
-  const timers = new Map();
-  const hooks = {
-    useState(value) { const id = cursor++; if (!(id in slots)) slots[id] = value; return [slots[id], next => { slots[id] = typeof next === 'function' ? next(slots[id]) : next; dirty = true; }]; },
-    useRef(value) { const id = cursor++; return slots[id] || (slots[id] = { current: value }); },
-    useEffect(fn, deps) { const id = cursor++; if (!slots[id] || deps.some((value, i) => !Object.is(value, slots[id].deps[i]))) pending.push(() => { slots[id]?.cleanup?.(); slots[id] = { deps, cleanup: fn() }; }); },
-  };
-  let railScroll = 0;
-  const api = compile('src/components/home/home-interactive.tsx', {
-    react: hooks, 'framer-motion': { useReducedMotion: () => reduced },
-    'next/link': { default: 'link' }, 'lucide-react': { ArrowLeft: 'left', ArrowRight: 'right', Pause: 'pause', Play: 'play' },
-    '@/content/strings': copy, '@/components/safe-image': { SafeImage: 'image' },
-    '@/components/ui': { Button: 'button', ButtonLink: 'button-link', Card: 'card' },
-  }, { performance: { now: () => clock }, document: { hidden: false }, window: {
-    setInterval(fn, duration) { timers.set(++timerId, { fn, duration, next: clock + duration }); return timerId; },
-    clearInterval(id) { timers.delete(id); },
-  } });
-  const render = () => {
-    cursor = 0; pending = []; dirty = false;
-    tree = api[component]({ articles });
-    const rail = walk(tree).find(node => node.props.className === 'story-rail');
-    if (rail && !rail.props.ref.current) rail.props.ref.current = { offsetLeft: 0, clientWidth: 300, children: articles.map((_, i) => ({ offsetLeft: i * 100, clientWidth: 88 })), scrollTo: ({ left }) => { railScroll = left; } };
-    pending.forEach(fn => fn());
-  };
-  render();
-  return {
-    get tree() { return tree; }, get railScroll() { return railScroll; },
-    find(predicate) { const result = walk(tree).find(predicate); assert.ok(result, 'Expected node'); return result; },
-    event(node, name, value) { node.props[name](value); render(); },
-    advance(ms) { const end = clock + ms; while (clock < end) { clock += 50; [...timers.values()].forEach(timer => { if (clock >= timer.next) { timer.next += timer.duration; timer.fn(); } }); if (dirty) render(); } },
-    sync(expected) {
-      const active = walk(tree).filter(node => node.props.className?.includes('story-slide') && node.props['aria-hidden'] === false);
-      assert.equal(active.length, 1); assert.equal(active[0].props['data-slide'], expected); assert.equal(active[0].props.inert, false);
-      const thumbs = walk(tree).filter(node => node.props.className === 'story-thumb');
-      assert.equal(thumbs.length, 20); assert.equal(thumbs.findIndex(node => node.props['aria-current']) + 1, expected);
-      assert.equal(text(this.find(node => node.props.className === 'story-counter')), String(expected).padStart(2, '0') + ' / 20');
-      assert.equal(walk(tree).filter(node => node.props.className?.includes('story-slide')).length, 20);
-      checks++;
-    },
-  };
-}
-const deck = harness('StoryDeck');
-deck.sync(1);
-for (let i = 1; i <= 20; i++) {
-  deck.event(deck.find(node => node.props['aria-label']?.startsWith('Go to story ' + String(i).padStart(2, '0') + ':')), 'onClick');
-  deck.sync(i);
-}
-assert.ok(deck.railScroll > 1500, 'Rail follows story 20');
-deck.event(deck.find(node => node.props['aria-label'] === copy.homeCopy.next), 'onClick'); deck.sync(1);
-deck.event(deck.find(node => node.props['aria-label'] === copy.homeCopy.previous), 'onClick'); deck.sync(20);
-const region = () => deck.find(node => node.props['aria-roledescription'] === 'carousel');
-deck.event(region(), 'onKeyDown', { key: 'ArrowRight', preventDefault() {} }); deck.sync(1);
-deck.advance(6050); deck.sync(2);
-deck.event(region(), 'onMouseEnter'); deck.advance(7000); deck.sync(2);
-deck.event(region(), 'onMouseLeave'); deck.event(region(), 'onFocusCapture'); deck.advance(7000); deck.sync(2);
-deck.event(region(), 'onBlurCapture', { currentTarget: { contains: () => false }, relatedTarget: null });
-deck.event(deck.find(node => node.props['aria-label'] === copy.homeCopy.pause), 'onClick'); deck.advance(7000); deck.sync(2);
-deck.event(deck.find(node => node.props['aria-label'] === copy.homeCopy.play), 'onClick'); deck.advance(6050); deck.sync(3);
-const surface = () => deck.find(node => node.props.className === 'story-deck');
-deck.event(surface(), 'onPointerDown', { button: 0, clientX: 250, pointerId: 1, target: { closest: () => null } });
-deck.event(surface(), 'onPointerMove', { clientX: 100, pointerId: 1, currentTarget: { setPointerCapture() {} } });
-deck.event(surface(), 'onPointerUp', { clientX: 100 }); deck.sync(4);
-const progress = deck.find(node => node.props.role === 'progressbar'); assert.equal(progress.props['aria-valuenow'], 0);
-let prevented = false;
-deck.event(deck.find(node => node.type === 'link' && node.props.href.includes('Story%204')), 'onClick', { preventDefault() { prevented = true; } });
-assert.ok(prevented, 'Swiping does not navigate');
-const reducedDeck = harness('StoryDeck', true); reducedDeck.advance(12000); reducedDeck.sync(1);
-reducedDeck.event(reducedDeck.find(node => node.props['aria-label'] === copy.homeCopy.next), 'onClick'); reducedDeck.sync(2);
-assert.equal(reducedDeck.find(node => node.props['aria-label'] === copy.homeCopy.pause).props.disabled, true);
-const hero = harness('HomeHero'); hero.advance(4250); assert.ok(text(hero.tree).includes('standings'));
-hero.event(hero.find(node => node.props['aria-label'] === copy.homeCopy.pauseHero), 'onClick'); hero.advance(5000); assert.ok(text(hero.tree).includes('standings'));
-const reducedHero = harness('HomeHero', true); reducedHero.advance(9000); assert.ok(text(reducedHero.tree).includes('live scores'));
-checks += 5;
+const banners = Array.from({ length: 20 }, (_, i) => ({ id: 'b' + i, title: 'Story ' + (i + 1), description: i % 2 ? 'Culture' : 'Analysis', image: '/images/fallback.svg', href: '/search?q=story-' + (i + 1) }));
+const motionValue = () => ({ get: () => 0, set() {}, on: () => () => {} });
+let galleryCursor = 0, gallerySlots = [];
+const gallery = compile('src/components/home/story-gallery.tsx', {
+  react: {
+    useState(value) { const id = galleryCursor++; if (!(id in gallerySlots)) gallerySlots[id] = value; return [gallerySlots[id], () => {}]; },
+    useRef(value) { const id = galleryCursor++; return gallerySlots[id] || (gallerySlots[id] = { current: value }); },
+    useEffect() {},
+  },
+  'framer-motion': { useMotionValue: motionValue, useScroll: () => ({ scrollYProgress: motionValue() }), useTransform: () => motionValue() },
+  'next/link': { default: 'link' }, 'lucide-react': { ArrowUpRight: 'arrow' },
+  '@/content/strings': copy, '@/components/safe-image': { SafeImage: 'image' }, '@/components/ui': { ButtonLink: 'button-link' },
+});
+galleryCursor = 0;
+const galleryTree = gallery.StoryGallery({ banners });
+const galleryCards = walk(galleryTree).filter(node => String(node.props?.banner?.href || '').startsWith('/search?q='));
+assert.equal(galleryCards.length, 20);
+assert.equal(galleryCards.filter(node => node.props.priority === true).length, 3);
+assert.ok(fs.readFileSync(path.join(root, 'src/components/home/story-gallery.tsx'), 'utf8').includes('const SCROLL_DIRECTION = -1'));
+checks += 2;
 const css = postcss.parse(fs.readFileSync(path.join(root, 'src/app/home.css'), 'utf8'));
 function property(selector, name, width, reduced) {
   let result;
@@ -118,10 +62,12 @@ for (const width of [320, 375, 767, 768, 1440]) for (const reduced of [false, tr
   assert.equal(property('.stack-card', 'position', width, reduced), staticLayout ? 'relative' : 'sticky');
   assert.equal(property('.qa-live .fans-stage', 'position', width, reduced), reduced ? 'relative' : 'sticky');
   assert.equal(property('.home-fans.qa-live', 'height', width, reduced), reduced ? 'auto' : width < 768 ? '160vh' : '220vh');
+  assert.equal(property('.gallery-pin.is-live', 'height', width, reduced), reduced ? 'auto' : width < 768 ? '250vh' : '350vh');
+  assert.equal(property('.gallery-pin.is-live .gallery-stage', 'position', width, reduced), reduced ? 'relative' : 'sticky');
   if (staticLayout) assert.equal(property('.stack-card', 'transform', width, reduced), 'none');
   checks++;
 }
-console.log(`PASS: ${checks} carousel synchronization, autoplay, hover/focus/pause, swipe, hero and responsive/reduced-motion CSS checks. Browser rendering remains unverified.`);
+console.log(`PASS: ${checks} gallery, stack and reduced-motion CSS checks. Browser rendering remains unverified.`);
 
 // Exercise the lazy scroll enhancement against desktop, mobile and reduced motion.
 for (const mode of [{ width: 1440, reduced: false }, { width: 375, reduced: false }, { width: 1440, reduced: true }]) {

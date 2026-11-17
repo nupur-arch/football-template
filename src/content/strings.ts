@@ -3,6 +3,7 @@ export const strings = {
 } as const;
 export const homeCopy = {
   heroLead: 'One place for', phrases: ['live scores', 'standings', 'transfers', 'fixtures'],
+  galleryTitle: 'One place for live scores.', allStories: 'All stories',
   pauseHero: 'Pause headline rotation', playHero: 'Resume headline rotation',
   stories: 'Top stories', storiesLabel: 'The game, from every angle', previous: 'Previous story', next: 'Next story',
   pause: 'Pause autoplay', play: 'Play autoplay', carousel: 'Top stories carousel', story: 'Go to story',

@@ -1,8 +1,9 @@
 ﻿import type { Metadata } from 'next';
-import { getArticles, getMatches, getStandings, getPlayers } from '@/services';
+import { getArticles, getBanners, getMatches, getStandings, getPlayers } from '@/services';
 import { siteConfig } from '@/content/site.config';
 import { strings } from '@/content/strings';
-import { HomeHero, StoryDeck, MatchStrip } from '@/components/home/home-interactive';
+import { MatchStrip } from '@/components/home/home-interactive';
+import { StoryGallery } from '@/components/home/story-gallery';
 import { HomeScenes } from '@/components/home/home-scenes';
 import { HomeMore } from '@/components/home/home-more';
 import './home.css';
@@ -12,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: siteConfig.name + ' — ' + strings.tagline, alternates: { canonical: '/' } };
 }
 export default async function Home() {
-  const [articles, matches, standings, players] = await Promise.all([getArticles(), getMatches(), getStandings(), getPlayers()]);
+  const [articles, banners, matches, standings, players] = await Promise.all([getArticles(), getBanners(), getMatches(), getStandings(), getPlayers()]);
   const featured = articles.filter(article => article.featured).slice(0, 20);
   const schema = { '@context': 'https://schema.org', '@graph': [
     { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: strings.home, item: siteConfig.url }] },
@@ -22,7 +23,7 @@ export default async function Home() {
   ] };
   return <main id="main">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, '\\u003c') }} />
-    <HomeHero /><StoryDeck articles={featured} /><MatchStrip matches={matches} />
+    <StoryGallery banners={banners.slice(0, 20)} /><MatchStrip matches={matches} />
     <HomeScenes articles={articles.slice(0, 4)} />
     <HomeMore articles={articles} matches={matches} standings={standings} players={players} />
   </main>;
