@@ -117,7 +117,7 @@ for (const width of [320, 375, 767, 768, 1440]) for (const reduced of [false, tr
   const staticLayout = width < 768 || reduced;
   assert.equal(property('.stack-card', 'position', width, reduced), staticLayout ? 'relative' : 'sticky');
   assert.equal(property('.fans-stage', 'position', width, reduced), staticLayout ? 'relative' : 'sticky');
-  assert.equal(property('.home-fans', 'height', width, reduced), staticLayout ? 'auto' : '190vh');
+  assert.equal(property('.home-fans', 'height', width, reduced), staticLayout ? 'auto' : '220vh');
   if (staticLayout) assert.equal(property('.stack-card', 'transform', width, reduced), 'none');
   if (width < 768) assert.equal(property('.fan-pill', 'position', width, reduced), 'static');
   checks++;

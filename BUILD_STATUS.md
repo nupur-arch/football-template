@@ -33,10 +33,16 @@
 - S9 completed in `src/components/home/home-more.tsx` and `src/app/home-more.css`: leagues / competitions / categories now render as grouped tile stages with desktop slide-up group transitions, tab-style group controls, and readable stacked mobile/reduced-motion fallbacks.
 
 ## In progress
-- None. StoryDeck hydration fix is complete.
+- None. The dark pinned fan section (S5) scroll fix is complete.
 
 ## Next
 - Stop after this fix. Await an explicit next-step instruction before changing other areas.
+
+## S5 pin fix
+- `src/app/home.css`: pin length is 220vh; the sticky stage and its photo are `calc(100svh - var(--header-h))` with `object-fit: cover` inside the stage. Pills use fixed percent positions. Mobile and reduced motion stay unpinned.
+- `src/app/globals.css`: `--header-h: 5rem` keeps the headlines below the sticky header.
+- Mojibake `â€` removed in `src/content/strings.ts` (`Who’s`) and `src/components/home/home-interactive.tsx` (en dash). Files are UTF-8.
+- Checked in the browser at 1440×700, 1440×900, and 390×844: scroll moves both ways, the photo stays inside the stage, pills and the CTA do not overlap.
 
 ## Decisions
 - This is a local repository implementation; no hosting or publication.

@@ -14,7 +14,7 @@ export const homeCopy = {
   latestLabel: 'Fresh off the pitch', latest: 'The latest word.', allNews: 'Explore all news',
   fanLabel: 'Every fan. Every question.', fanLeft: 'Big moments.', fanRight: 'Bigger conversations.',
   fanBody: 'Your game. Your questions. All in one place.',
-  questions: ['Who scored?', 'When is kickoff?', 'Where is the table?', 'Whoâ€™s on the move?', 'What a finish!', 'Who starts tonight?'],
+  questions: ['Who scored?', 'When is kickoff?', 'Where is the table?', 'Who’s on the move?', 'What a finish!', 'Who starts tonight?'],
   ask: 'Find your answer', fixtureNote: 'Illustrative fixture data',
 } as const;
 export const moreCopy = {
