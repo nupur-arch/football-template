@@ -1,18 +1,18 @@
 /* Home S1–S5. Static content is the baseline; motion is progressive enhancement. */
 .home-eyebrow { margin-bottom:1rem; font-size:.75rem; font-weight:600; letter-spacing:.17em; text-transform:uppercase; }
 .gallery-pin { position:relative; height:auto; overflow:visible; }
-.gallery-pin.is-live { height:350vh; }
+.gallery-pin.is-live { height:1100vh; }
 .gallery-stage { position:relative; display:flex; flex-direction:column; }
-.gallery-pin.is-live .gallery-stage { position:sticky; top:var(--header-h); height:calc(100svh - var(--header-h)); max-height:calc(100svh - var(--header-h)); overflow:hidden; }
+.gallery-pin.is-live .gallery-stage { position:sticky; top:var(--header-h); height:calc(100svh - var(--header-h)); max-height:calc(100svh - var(--header-h)); overflow:visible; }
 .gallery-head { padding:1rem 0 .35rem; text-align:center; }
 .gallery-head .home-eyebrow { margin-bottom:.3rem; }
 .gallery-head h1 { margin:0; font-family:var(--font-display); font-weight:650; font-size:clamp(1.45rem,2.8vw,2.4rem); line-height:1.05; letter-spacing:-.045em; }
 .gallery-scene { min-width:0; }
-.gallery-pin.is-live .gallery-scene { flex:1 1 auto; min-height:0; perspective:1200px; }
+.gallery-pin.is-live .gallery-scene { flex:1 1 auto; min-height:0; perspective:1200px; transform-style:preserve-3d; }
 .gallery-track { display:flex; gap:.9rem; overflow-x:auto; padding:.35rem 0 .6rem; scrollbar-width:thin; touch-action:pan-x; }
 .gallery-track.is-cylinder { position:relative; display:block; height:100%; overflow:visible; padding:0; transform:translateZ(-1100px); transform-style:preserve-3d; touch-action:pan-y; }
 .gallery-card { position:relative; display:block; flex:0 0 min(78vw,300px); height:min(420px,52vh); overflow:hidden; border-radius:var(--radius-card); color:#fff; background:var(--pitch); }
-.gallery-track.is-cylinder .gallery-card { position:absolute; left:50%; top:50%; width:min(30vw,300px); height:min(74%,430px); flex:none; transform:translate(-50%,-50%); transition:none; }
+.gallery-track.is-cylinder .gallery-card { position:absolute; left:50%; top:50%; width:min(28vw,280px); height:min(72%,420px); flex:none; transform:translate(-50%,-50%); transform-style:preserve-3d; backface-visibility:hidden; transition:none; }
 .gallery-card:hover { transform:translateY(-6px); }
 .gallery-track.is-cylinder .gallery-card:hover { transform:translate(-50%,-50%); }
 .gallery-card:focus-visible { outline:2px solid var(--lime); outline-offset:3px; }
@@ -96,9 +96,9 @@
   .qa-sub { margin-bottom:.4rem; }
 }
 @media(max-width:767px) {
-  .gallery-pin.is-live { height:250vh; }
+  .gallery-pin.is-live { height:900vh; }
   .gallery-card { flex-basis:72vw; height:min(360px,48vh); }
-  .gallery-track.is-cylinder { transform:translateZ(-420px); }
+  .gallery-track.is-cylinder { transform:translateZ(-460px); }
   .gallery-track.is-cylinder .gallery-card { width:min(58vw,220px); height:min(68%,380px); }
   .gallery-copy { right:3.6rem; padding:.85rem 0 .85rem .85rem; }
   .gallery-title { font-size:1rem; }

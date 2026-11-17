@@ -11,8 +11,8 @@ import { ButtonLink } from '@/components/ui';
 
 /** -1 scrolls the track from left to right as the page moves down. Flip the sign to reverse it. */
 const SCROLL_DIRECTION = -1;
-const DESKTOP = { step: 18, radius: 1100, limit: 2 };
-const MOBILE = { step: 22, radius: 420, limit: 1 };
+const DESKTOP = { step: 24, radius: 1100, limit: 2 };
+const MOBILE = { step: 24, radius: 460, limit: 1 };
 
 const pad = (value: number) => String(value).padStart(2, '0');
 
@@ -25,15 +25,36 @@ function GalleryCard({ banner, index, count, progress, live, compact, priority }
     const delta = (index - Number(raw) * span) * SCROLL_DIRECTION;
     const distance = Math.abs(delta);
     const lift = Number(lifted);
-    const hidden = distance > limit + 0.35;
-    const scale = (hidden ? 0.84 : 1 - Math.min(distance, limit) * 0.07) + lift * 0.03;
+    const hidden = distance > limit + 0.45;
+    const scale = (hidden ? 0.8 : 1 - Math.min(distance, limit) * 0.12) + lift * 0.045;
+    const opacity = hidden ? 0 : Math.max(0, 1 - distance * (limit === 1 ? 0.55 : 0.4));
     return {
-      transform: `translate(-50%, -50%) translateY(${lift * -18}px) rotateY(${delta * step * (1 - lift)}deg) translateZ(${(hidden ? -480 : radius) + lift * 80}px) scale(${scale})`,
-      opacity: hidden ? 0 : Math.max(0, 1 - distance * (limit === 1 ? 0.42 : 0.28)),
-      z: 100 - Math.round(distance * 8),
-      hidden,
+      transform: `translate(-50%, -50%) translateY(${lift * -22}px) rotateY(${delta * step * (1 - lift * 0.92)}deg) translateZ(${(hidden ? -520 : radius) + lift * 90}px) scale(${scale})`,
+      opacity,
+      z: 120 - Math.round(distance * 20),
+      hidden: hidden || distance > 0.55,
     };
   });
+  useEffect(() => {
+    if (!live) return;
+    let frame = 0;
+    let current = 0;
+    let goal = 0;
+    const tick = () => {
+      current += (goal - current) * 0.18;
+      if (Math.abs(goal - current) < 0.01) current = goal;
+      hover.set(current);
+      frame = current === goal ? 0 : requestAnimationFrame(tick);
+    };
+    const aim = (value: number) => { goal = value; if (!frame) frame = requestAnimationFrame(tick); };
+    const node = ref.current;
+    if (!node) return;
+    const enter = () => aim(1);
+    const leave = () => aim(0);
+    node.addEventListener('mouseenter', enter);
+    node.addEventListener('mouseleave', leave);
+    return () => { cancelAnimationFrame(frame); node.removeEventListener('mouseenter', enter); node.removeEventListener('mouseleave', leave); };
+  }, [live, hover]);
   useEffect(() => {
     const node = ref.current;
     if (!node) return;
@@ -57,7 +78,7 @@ function GalleryCard({ banner, index, count, progress, live, compact, priority }
     write();
     return pose.on('change', write);
   }, [live, pose]);
-  return <Link ref={ref} href={banner.href} className="gallery-card" onMouseEnter={live ? () => hover.set(1) : undefined} onMouseLeave={live ? () => hover.set(0) : undefined}>
+  return <Link ref={ref} href={banner.href} className="gallery-card">
     <span className="gallery-media"><SafeImage src={banner.image} alt="" fill sizes="(max-width: 767px) 70vw, 340px" priority={priority} className="object-cover" /></span>
     <span className="gallery-shade" />
     <span className="gallery-copy"><span className="gallery-chip">{banner.description}</span><h2 className="gallery-title">{banner.title}</h2></span>
@@ -73,6 +94,7 @@ export function StoryGallery({ banners }: { banners: Banner[] }) {
   const [live, setLive] = useState(false);
   const [compact, setCompact] = useState(false);
   const { scrollYProgress } = useScroll({ target: section, offset: ['start start', 'end end'] });
+  const visual = useMotionValue(0);
   const count = banners.length;
   const span = Math.max(count - 1, 1);
   useEffect(() => {
@@ -86,13 +108,42 @@ export function StoryGallery({ banners }: { banners: Banner[] }) {
   }, []);
   useEffect(() => {
     if (!live) return;
-    const write = (value: number) => {
-      if (counter.current) counter.current.textContent = pad(Math.round(value * span) + 1);
-      if (line.current) line.current.style.transform = `scaleX(${value})`;
+    let frame = 0;
+    let current = scrollYProgress.get();
+    let goal = current;
+    let mode = 'follow';
+    let restScroll = current;
+    let idle = 0;
+    const noise = 0.08 / span;
+    const tick = () => {
+      current += (goal - current) * (mode === 'settle' ? 0.14 : 0.5);
+      if (Math.abs(goal - current) < 0.0004) {
+        current = goal;
+        if (mode === 'settle') mode = 'rest';
+      }
+      visual.set(current);
+      if (counter.current) counter.current.textContent = pad(Math.round(current * span) + 1);
+      if (line.current) line.current.style.transform = `scaleX(${current})`;
+      frame = current === goal ? 0 : requestAnimationFrame(tick);
     };
-    write(scrollYProgress.get());
-    return scrollYProgress.on('change', write);
-  }, [live, scrollYProgress, span]);
+    const kick = () => { if (!frame) frame = requestAnimationFrame(tick); };
+    const follow = (value: number) => {
+      if (mode === 'rest' && Math.abs(value - restScroll) < noise) return;
+      mode = 'follow';
+      goal = value;
+      window.clearTimeout(idle);
+      idle = window.setTimeout(() => {
+        mode = 'settle';
+        restScroll = scrollYProgress.get();
+        goal = Math.round(restScroll * span) / span;
+        kick();
+      }, 200);
+      kick();
+    };
+    const stop = scrollYProgress.on('change', follow);
+    follow(scrollYProgress.get());
+    return () => { stop(); cancelAnimationFrame(frame); window.clearTimeout(idle); };
+  }, [live, scrollYProgress, span, visual]);
   const syncRow = () => {
     const node = track.current;
     if (!node || live) return;
@@ -117,7 +168,7 @@ export function StoryGallery({ banners }: { banners: Banner[] }) {
       </div>
       {count ? <div className="gallery-scene">
         <div ref={track} className={live ? 'gallery-track is-cylinder' : 'gallery-track'} data-lenis-prevent={live ? undefined : true} onScroll={live ? undefined : syncRow}>
-          {banners.map((banner, index) => <GalleryCard key={banner.id} banner={banner} index={index} count={count} progress={scrollYProgress} live={live} compact={compact} priority={index < 3} />)}
+          {banners.map((banner, index) => <GalleryCard key={banner.id} banner={banner} index={index} count={count} progress={visual} live={live} compact={compact} priority={index < 3} />)}
         </div>
       </div> : <p className="container-shell text-muted">{strings.empty}</p>}
       <div className="container-shell gallery-foot">

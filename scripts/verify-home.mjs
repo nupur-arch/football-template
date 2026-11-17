@@ -62,7 +62,7 @@ for (const width of [320, 375, 767, 768, 1440]) for (const reduced of [false, tr
   assert.equal(property('.stack-card', 'position', width, reduced), staticLayout ? 'relative' : 'sticky');
   assert.equal(property('.qa-live .fans-stage', 'position', width, reduced), reduced ? 'relative' : 'sticky');
   assert.equal(property('.home-fans.qa-live', 'height', width, reduced), reduced ? 'auto' : width < 768 ? '160vh' : '220vh');
-  assert.equal(property('.gallery-pin.is-live', 'height', width, reduced), reduced ? 'auto' : width < 768 ? '250vh' : '350vh');
+  assert.equal(property('.gallery-pin.is-live', 'height', width, reduced), reduced ? 'auto' : width < 768 ? '900vh' : '1100vh');
   assert.equal(property('.gallery-pin.is-live .gallery-stage', 'position', width, reduced), reduced ? 'relative' : 'sticky');
   if (staticLayout) assert.equal(property('.stack-card', 'transform', width, reduced), 'none');
   checks++;
